@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('comment',1000); //書籍感想コメント用
             $table->integer('recommended_level',1); //書籍おすすめ度用
             $table->timestamps();
-            $table->primarykey(['EMPLOYEE_ID','ISBN']);
+            $table->primary(['EMPLOYEE_ID','ISBN']);
         });
     }
 
