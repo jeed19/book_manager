@@ -12,6 +12,11 @@ class EmployeesSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        DB::table('employees')->insert([
+            'EMPLOYEE_ID'=> 10000000,
+            'password' => 'Ict202601',
+            'department_id' => 200,
+            
+        ]);
     }
 }
