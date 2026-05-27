@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\DB;
 
 class BooksSeeder extends Seeder
 {
@@ -34,7 +36,7 @@ class BooksSeeder extends Seeder
         }
 
         //opneBDから届いた書籍データを１冊ずつループ処理
-        foreach($itemes as $item){
+        foreach($items as $item){
             //もしデータがなかったらスキップ
             if(is_null($item)){
                 continue;
