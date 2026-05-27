@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('books', function (Blueprint $table) {
-            $table->integer('ISBN',13)->primarykey(); //書籍識別ID用
+            $table->bigInteger('ISBN')->primary(); //書籍識別ID用
             $table->string('book_name',100); //書籍名用
             $table->string('author_name',100); //著者名
             $table->string('cover_image',100); //書籍画像
