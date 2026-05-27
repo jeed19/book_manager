@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('employees', function (Blueprint $table) {
-            $table->integer('EMPLOYEE_ID')->primary(); //役員識別ID用
-            $table->string('password',32); 
-            $table->integer('department_id'); //各役員名用
+            $table->integer('EMPLOYEE_ID')->primary(); //ログイン用のID
+            $table->string('password',32);  //ログイン用のPW
+            $table->integer('department_id'); //各役職識別用
             $table->dateTime('joining_date'); //入社日用
         });
     }
