@@ -15,28 +15,32 @@ class EmployeesSeeder extends Seeder
     {
         // ４人の社員登録、１人は経理部、他３人は社員
         DB::table('employees')->insert([
-            'EMPLOYEE_ID' => fake()->unique()->numberBetween(10000000,99999999),
+            'employee_id' => fake()->unique()->numberBetween(10000000,99999999),
             'password' => 'Ict202601',
             'department_id' => 200,
-            'joining_date' => '2026-05-26'
+            'employee_name' => '伊藤',
+            'display_name' => '伊藤'
         ]);
         DB::table('employees')->insert([
-            'EMPLOYEE_ID' => fake()->unique()->numberBetween(10000000,99999999),
+            'employee_id' => fake()->unique()->numberBetween(10000000,99999999),
             'password' => 'Ict202601',
             'department_id' => 400,
-            'joining_date' => '2026-05-26'
+            'employee_name' => '高城',
+            'display_name' => '高城'
         ]);
         DB::table('employees')->insert([
-            'EMPLOYEE_ID' => fake()->unique()->numberBetween(10000000,99999999),
+            'employee_id' => fake()->unique()->numberBetween(10000000,99999999),
             'password' => 'Ict202601',
             'department_id' => 400,
-            'joining_date' => '2026-05-26'
+            'employee_name' => '寺岡',
+            'display_name' => '寺岡'
         ]);
         DB::table('employees')->insert([
-            'EMPLOYEE_ID' => fake()->unique()->numberBetween(10000000,99999999),
+            'employee_id' => fake()->unique()->numberBetween(10000000,99999999),
             'password' => 'Ict202601',
             'department_id' => 400,
-            'joining_date' => '2026-05-26'
+            'employee_name' => '日根野',
+            'display_name' => '日根野'
         ]);
     }
 }
