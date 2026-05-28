@@ -13,17 +13,13 @@ class BooksController extends Controller
 {
     public function index(Request $req){
         $data = [
-            // 'user' => Employees::find($req->employee_id),
+            'session_data' => $req->session()->get('session_data',0),
             'records' => Book::all()
         ];
         return view('Books.index',$data);
     }
 
     public function create(Request $req){
-        $data = [
-            // 'user' => Employees::find($req->employee_id),
-            'records' => Book::all()
-        ];
         return view('Books.create',$data);
     }
 
@@ -60,7 +56,7 @@ class BooksController extends Controller
 
         // 登録したデータを照会画面に渡し、表示する
         $data =[
-            // 'user' => $req->user,
+            'session_data' => $req->session()->get('session_data',0),
             'record' =>  Book::find($req->isbn),
             'reviews' => Review::find($req->isbn)
         ];
@@ -82,17 +78,18 @@ class BooksController extends Controller
             // 'user' => Employees::find($req->employee_id),
             'records' => Book::all()
         ];
-        return view('Books.index',$data);
+        return redirect()->action([BooksController::class,'index']);
     }
 
 
     public function show(Request $req){
         $data =[
-            // 'user' => Employees::find($req->employee_id),
+            'session_data' => $req->session()->get('session_data',0),
             'isbn' => $req->isbn,
             'bookRecord' => Book::find($req->isbn),
             'reviews' => Review::find($req->isbn)
         ];
+        return view('Books.show',$data);
     }
 
 

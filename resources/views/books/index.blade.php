@@ -6,6 +6,9 @@
     <title>Document</title>
 </head>
 <body>
+
+    <p>従業員名：{{$session_data['employee_name']}}</p>
+
     <table>
         <tr><th>ISBN</th><th>タイトル</th><th>著者名</th><th>画像</th>
             @foreach($records as $record)
