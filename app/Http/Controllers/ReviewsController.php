@@ -17,7 +17,7 @@ class ReviewsController extends Controller
         }
 
         $isbn = $req->isbn;
-        $book = book::find($isbn);
+        $book = Book::find($isbn);
 
         if(!book) {
             return redirect()->action([BooksController::class,'index']);
@@ -51,7 +51,7 @@ class ReviewsController extends Controller
             //検索条件で社員が書籍に対して書いたレビューが存在するか
             [
                 'employee_id' => $session_data['employee_id'],
-                'isbn' => $req -> $isbn,
+                'isbn' => $req -> isbn,
             ],
             // 更新するデータ
             [
@@ -112,7 +112,7 @@ class ReviewsController extends Controller
 
     }
     //レビュー編集画面の表示
-    public function edit($id)
+    public function edit(Request $req,$id)
     {
         $session_data = $req->session()->get('session_data');
         if(!$session_data){
