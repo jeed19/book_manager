@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->integer('employee_id')->primary(); //役員識別ID用
-            $table->string('password',128); 
+            $table->string('password',32); 
             $table->integer('department_id'); //各役員名用
             $table->string('employee_name',32); 
             $table->string('display_name',32); 

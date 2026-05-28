@@ -54,7 +54,11 @@ class UsersController extends Controller
 
     $req->session()->put('session_data', $employee_data);
 
-    return view('Books.index');
+    // return view('Books.index');
+
+    // return redirect('/book_manager/Books/index');
+    return redirect()->action([BooksController::class,'index']);
+
     }
 
     public function edit(Request $req){
