@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('department_id'); //各役員名用
             $table->string('employee_name',32); 
             $table->string('display_name',32); 
-            $table->dateTime('joining_date'); //入社日用
+            // $table->dateTime('joining_date'); //入社日用
         });
     }
 
