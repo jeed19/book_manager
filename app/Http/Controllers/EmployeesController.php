@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
@@ -279,5 +280,23 @@ class EmployeesController extends Controller
         }
 
         return $rule;
+    }
+
+    /**
+     * 従業員のログアウト処理
+     */
+    public function logout(Request $request)
+    {
+        // 1. 認証解除
+        Auth::logout();
+
+        // 2. 現在のセッションにあるデータをすべて削除
+        $request->session()->invalidate();
+
+        // 3. セッションのCSRFトークンを再生成（セッション固定攻撃の防止）
+        $request->session()->regenerateToken();
+
+        // 4. 任意のページ（例: ログイン画面）へリダイレクト
+        return redirect()->to('/');
     }
 }

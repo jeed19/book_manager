@@ -46,7 +46,7 @@
         <li><a href="/Employees/edit">ユーザ表示名・パスワード変更</a></li>
     
     @if(session('session_data')['can_unlock'])
-    <li><a href="/Employees/index" style="color: blue; font-weight: bold;">【管理者用】アカウントロック解除画面</a></li>
+    <li><a href="/employees/index" style="color: blue; font-weight: bold;">【管理者用】アカウントロック解除画面</a></li>
     @endif
 </ul>
 </body>
