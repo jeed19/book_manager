@@ -43,3 +43,4 @@ Route::get('reviews/{id}/erase',[ReviewsController::class,'delete'])->name('revi
 Route::get('books/{isbn}/reviews/show', [ReviewsController::class, 'show'])->name('reviews.show');
 Route::post('books/{isbn}/reviews/delete', [ReviewsController::class, 'delete'])->name('reviews.delete');
 Route::get('/my-reviews', [ReviewsController::class, 'index'])->name('reviews.index');
+Route::post('/reviews/store/{isbn}', [App\Http\Controllers\ReviewsController::class, 'store'])->name('reviews.store');
