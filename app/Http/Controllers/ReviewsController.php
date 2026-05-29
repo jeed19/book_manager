@@ -29,7 +29,7 @@ class ReviewsController extends Controller
             'review' => null, //新規作成時は既存データが存在しないのでnull
         ];
 
-        return view('Reviews.create',$data);
+        return view('reviews.create',$data);
     }
     // レビューの保存、既存データあれば更新、なければ新規作成
     public function store(Request $req, $isbn)
@@ -89,7 +89,7 @@ class ReviewsController extends Controller
             'book' => $book,
         ];
 
-        return view('Reviews.show',$data);
+        return view('reviews.show',$data);
     }
 
         public function index(Request $req)
@@ -109,7 +109,7 @@ class ReviewsController extends Controller
             'reviews' => $reviews,
         ];
 
-        return view('Reviews.index',$data);
+        return view('reviews.index',$data);
 
     }
     //レビュー編集画面の表示
@@ -139,7 +139,7 @@ class ReviewsController extends Controller
             'review' => $review, //フォームに初期値を入れる為渡す
         ];
 
-        return view('Reviews.edit',$data);
+        return view('reviews.edit',$data);
     }
     //レビュー更新処理
     //edit画面で直した内容を、実際にデータベースへ上書き保存する。
