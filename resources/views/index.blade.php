@@ -74,7 +74,7 @@
 </head>
 <body>
     <div class="company-title">{{ config('company.name') }}　書籍管理システム</div>
-    <form action="" method="get" class="form-container">
+    <form action="/book_manager/login" method="post" class="form-container">
         @csrf
         <label for="employee_id">社員ID</label> 
         <input type="text" name="employee_id" id="employee_id" minlength="8" maxlength ="8" value="{{ old('employee_id')}}" required placeholder="ID"><br>
