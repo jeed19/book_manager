@@ -19,7 +19,7 @@ class ReviewsController extends Controller
         $isbn = $req->isbn;
         $book = Book::find($isbn);
 
-        if(!book) {
+        if(!$book) {
             return redirect()->action([BooksController::class,'index']);
         }
 
@@ -42,8 +42,8 @@ class ReviewsController extends Controller
         // バリデーション
         $req->validate([
             'isbn' => 'required',
-            'review_score' => 'required|integer|between:0,5',
-            // 'titel' => 'required|string|max255',　感想コメントにタイトル追加の場合記述
+            'recommended_level' => 'required|integer|between:0,5',
+            'title' => 'required|string|max:50',
             'comment' => 'required|string',
         ]);
 
@@ -51,12 +51,12 @@ class ReviewsController extends Controller
             //検索条件で社員が書籍に対して書いたレビューが存在するか
             [
                 'employee_id' => $session_data['employee_id'],
-                'isbn' => $req -> isbn,
+                'isbn' => $req->isbn,
             ],
             // 更新するデータ
             [
-                'review_score' => $req->review_score,
-                // 'title' => $req->title, 感想コメントにタイトル追加の場合記述
+                'recommended_level' => $req->recommended_level,
+                'title' => $req->title,
                 'comment' => $req->comment,
             ]
         );
@@ -156,14 +156,14 @@ class ReviewsController extends Controller
         }
 
         $req->validate([
-            'review_score' => 'required|integer|between:0,5',
-            // 'title' => 'required|string|max255',　感想コメントにタイトル追加の場合記述
+            'recommended_level' => 'required|integer|between:0,5',
+            'title' => 'required|string|max:50',
             'comment' => 'required|string',
         ]);
 
         //データの上書き保存
-        $review->review_score = $req->review_score;
-        // $review->title = $req->title;　感想コメントにタイトル追加の場合記述
+        $review->recommended_level = $req->recommended_level;
+        $review->title = $req->title;
         $review->comment = $req->comment;
         $review->save();
 
