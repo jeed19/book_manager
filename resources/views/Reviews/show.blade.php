@@ -9,6 +9,7 @@
 
     <p><strong>書籍ISBN:</strong> {{ $book->isbn }}</p>
     <p><strong>おすすめ度:</strong> {{ $review->recommended_level }}</p>
+    <p><strong>タイトル:</strong> {{ $review->title }}</p>
     <p><strong>コメント:</strong> {{ $review->comment }}</p>
     
     <hr>
