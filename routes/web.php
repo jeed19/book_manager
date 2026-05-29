@@ -23,17 +23,17 @@ Route::post('/book_manager/books/show',[BooksController::class,'show'])->name('s
 Route::post('books/store',[BooksController::class,'store'])->name('create.submit');
 
 Route::delete('books/index',[BooksController::class,'delete'])->name('delete.submit');
-Route::get('/Books/index', [BooksController::class, 'index'])->name('books.index'); // 書籍一覧
+Route::get('/books/index', [BooksController::class, 'index'])->name('books.index'); // 書籍一覧
 
 Route::post('/book_manager/login',[EmployeesController::class,'login']);
 
-Route::get('Employees/edit',[EmployeesController::class,'edit']); // ユーザ表示名更新画面
-Route::post('Employees/update',[EmployeesController::class,'update']); // ユーザ表示名更新
+Route::get('employees/edit',[EmployeesController::class,'edit']); // ユーザ表示名更新画面
+Route::post('employees/update',[EmployeesController::class,'update']); // ユーザ表示名更新
 
 // 社員管理画面（ロック解除リスト表示）
-Route::get('/Employees/index', [EmployeesController::class, 'index']);
+Route::get('/employees/index', [EmployeesController::class, 'index']);
 // ロック解除処理
-Route::post('/Employees/unlock', [EmployeesController::class, 'unlock']);
+Route::post('/employees/unlock', [EmployeesController::class, 'unlock']);
 
 // レビュー画面
 Route::get('books/{isbn}/show', [BooksController::class, 'show'])->name('books.show');
