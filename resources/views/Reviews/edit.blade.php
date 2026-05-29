@@ -9,7 +9,7 @@
 
     <p>対象の書籍ISBN: {{ $book->isbn }}</p>
 
-    <form action="{{ route('reviews.store', ['isbn' => $book->isbn]) }}" method="POST">
+    <form action="{{ route('reviews.delete', ['isbn' => $book->isbn]) }}" method="POST" ...>
         @csrf
 
         <div>

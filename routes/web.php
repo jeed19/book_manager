@@ -25,4 +25,5 @@ Route::post('/book_manager/login',[EmployeesController::class,'login']);
 Route::get('/books/{isbn}/reviews/edit',[ReviewsController::class,'edit'])->name('reviews.edit');
 Route::post('/books/{isbn}/reviews',[ReviewsController::class,'store'])->name('reviews.store');
 Route::get('reviews/{id}/erase',[ReviewsController::class,'delete'])->name('reviews.erase');
-Route::post('reviews/{id}/delete',[ReviewsController::class,'delete'])->name('reviews.delete');
+Route::get('books/{isbn}/reviews/show', [ReviewsController::class, 'show'])->name('reviews.show');
+Route::post('books/{isbn}/reviews/delete', [ReviewsController::class, 'delete'])->name('reviews.delete');

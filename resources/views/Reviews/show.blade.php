@@ -17,7 +17,7 @@
     
     <br><br>
 
-    <form action="{{ route('reviews.delete', ['id' => $review->id]) }}" method="POST" onsubmit="return confirm('本当に削除してよろしいですか？');">
+    <form action="{{ route('reviews.delete', ['isbn' => $book->isbn]) }}" method="POST" ...>
         @csrf
         <button type="submit" style="color: red;">このレビューを削除する</button>
     </form>

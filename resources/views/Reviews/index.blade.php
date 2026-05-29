@@ -16,7 +16,7 @@
             <p><strong>おすすめ度:</strong> {{ $r->recommended_level }}</p>
             <p><strong>コメント:</strong> {{ $r->comment }}</p>
             
-            <a href="{{ route('reviews.show', ['id' => $r->id]) }}">詳細を見る / 削除する</a>
+            <a href="{{ route('reviews.show', ['isbn' => $r->isbn]) }}">詳細を見る / 削除する</a>
         </div>
     @endforeach
 
