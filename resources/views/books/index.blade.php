@@ -35,7 +35,9 @@
 
     <br>
     <ul>
+        @if(session('session_data')['can_register_book'])
         <li><a href="/books/create">書籍作成</a></li>
+        @endif
         <li><a href="/Employees/edit">ユーザ表示名・パスワード変更</a></li>
     
     @if(session('session_data')['can_unlock'])
