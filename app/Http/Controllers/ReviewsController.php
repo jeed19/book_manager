@@ -17,7 +17,7 @@ class ReviewsController extends Controller
         }
 
         $isbn = $req->isbn;
-        $book = Book::find($isbn);
+        $book = Book::where('isbn', $isbn)->first();
 
         if(!$book) {
             return redirect()->action([BooksController::class,'index']);
@@ -41,7 +41,6 @@ class ReviewsController extends Controller
 
         // バリデーション
         $req->validate([
-            'isbn' => 'required',
             'recommended_level' => 'required|integer|between:0,5',
             'title' => 'required|string|max:50',
             'comment' => 'required|string',
@@ -51,7 +50,7 @@ class ReviewsController extends Controller
             //検索条件で社員が書籍に対して書いたレビューが存在するか
             [
                 'employee_id' => $session_data['employee_id'],
-                'isbn' => $req->isbn,
+                'isbn' => $isbn,
             ],
             // 更新するデータ
             [
@@ -72,7 +71,9 @@ class ReviewsController extends Controller
         }
 
         //指定されたIDのレビューを取得
-        $review = Review::find($isbn);
+        $review = Review::where('isbn', $isbn)
+                        ->where('employee_id', $session_data['employee_id'])
+                        ->first();
 
         //レビューが存在しない場合、書籍一覧に戻す
         if(!$review){
@@ -80,7 +81,7 @@ class ReviewsController extends Controller
         }
 
         //そのレビューが紐づく書籍情報を取得
-        $book = Book::find($review->isbn);
+        $book = Book::where('isbn', $review->isbn)->first();
 
         $data = [
             'session_data' => $session_data,
@@ -120,15 +121,17 @@ class ReviewsController extends Controller
         }
 
         //編集するレビューを取得
-        $review = Review::find($isbn);
+        $review = Review::where('isbn', $isbn)
+                        ->where('employee_id', $session_data['employee_id'])
+                        ->first();
 
         //他人のレビューを編集しようとしていないかチェック
-        if(!$review || $review->employee_id != $session_data['employee_id']){
+        /*if(!$review || $review->employee_id != $session_data['employee_id']){
             return redirect()->back()->withErrors(['error' => '権限がありません']);
-        }
+        }*/
 
         //書籍情報を取得
-        $book = Book::find($review->isbn);
+        $book = Book::where('isbn', $isbn)->first();
 
         $data = [
             'session_data' => $session_data,
@@ -148,7 +151,9 @@ class ReviewsController extends Controller
         }
 
         //更新対象のレビューを取得
-        $review = Review::find($isbn);
+        $review = Review::where('isbn', $isbn)
+                        ->where('employee_id', $session_data['employee_id'])
+                        ->first();
 
         //他人のレビューを更新していないかチェック
         if(!$review || $review->employee_id != $session_data['employee_id']){
@@ -181,7 +186,9 @@ class ReviewsController extends Controller
             return redirect('/');
         }
 
-        $review = Review::find($isbn);
+        $review = Review::where('isbn', $isbn)
+                        ->where('employee_id', $session_data['employee_id'])
+                        ->first();
 
         //他人のレビューを削除しようとしていないか確認する為のコード
         if($review && $review->employee_id == $session_data['employee_id']){
