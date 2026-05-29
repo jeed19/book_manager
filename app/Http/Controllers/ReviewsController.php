@@ -112,7 +112,7 @@ class ReviewsController extends Controller
 
     }
     //レビュー編集画面の表示
-    public function edit(Request $req,$id)
+    public function edit(Request $req,$isbn)
     {
         $session_data = $req->session()->get('session_data');
         if(!$session_data){
@@ -120,7 +120,7 @@ class ReviewsController extends Controller
         }
 
         //編集するレビューを取得
-        $review = Review::find($id);
+        $review = Review::find($isbn);
 
         //他人のレビューを編集しようとしていないかチェック
         if(!$review || $review->employee_id != $session_data['employee_id']){
@@ -140,7 +140,7 @@ class ReviewsController extends Controller
     }
     //レビュー更新処理
     //edit画面で直した内容を、実際にデータベースへ上書き保存する。
-    public function update(Request $req, $id)
+    public function update(Request $req, $isbn)
     {
         $session_data = $req->session()->get('session_data');
         if(!$session_data){
@@ -148,7 +148,7 @@ class ReviewsController extends Controller
         }
 
         //更新対象のレビューを取得
-        $review = Review::find($id);
+        $review = Review::find($isbn);
 
         //他人のレビューを更新していないかチェック
         if(!$review || $review->employee_id != $session_data['employee_id']){
@@ -181,7 +181,7 @@ class ReviewsController extends Controller
             return redirect('/');
         }
 
-        $review = Review::find($id);
+        $review = Review::find($isbn);
 
         //他人のレビューを削除しようとしていないか確認する為のコード
         if($review && $review->employee_id == $session_data['employee_id']){
