@@ -9,6 +9,6 @@
     <h1>ユーザ情報の更新が完了しました</h1>
     <p>新しい表示名：{{ $new_display_name }}</p>
     
-    <p><a href="/Books">書籍一覧へ戻る</a></p> 
+    <p><a href="{{ route('books.index') }}">書籍一覧画面へ戻る</a></p> 
     </body>
 </html>

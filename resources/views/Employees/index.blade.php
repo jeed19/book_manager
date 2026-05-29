@@ -74,7 +74,7 @@
     @endif
 
     <p style="margin-top: 20px;">
-        <a href="/Books">書籍一覧画面へ戻る</a>
+        <a href="{{ route('books.index') }}">書籍一覧画面へ戻る</a>
     </p>
 </body>
 </html>

@@ -9,7 +9,7 @@ Route::get('/', function () {
     return view('index');
 });
 
-Route::get('books/index',[BooksController::class,'index']); // 書籍一覧
+Route::get('/Books/index', [BooksController::class, 'index'])->name('books.index'); // 書籍一覧
 
 Route::post('/book_manager/login',[EmployeesController::class,'login']);
 
