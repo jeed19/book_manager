@@ -9,7 +9,18 @@ Route::get('/', function () {
     return view('index');
 });
 
-Route::get('books/index',[BooksController::class,'index']); // 書籍一覧
+Route::get('books/create', function () {
+    return view('books/create');
+})->name('books.create');
+
+Route::get('books/index',[BooksController::class,'index']);
+
+Route::post('/book_manager/login',[UsersController::class,'login']);
+
+Route::post('books/show',[BooksController::class,'store']);
+
+Route::delete('books/index',[BooksController::class,'delete'])->name('delete.submit');
+Route::get('/Books/index', [BooksController::class, 'index'])->name('books.index'); // 書籍一覧
 
 Route::post('/book_manager/login',[EmployeesController::class,'login']);
 

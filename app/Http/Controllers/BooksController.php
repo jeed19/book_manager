@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Client\ConnectionException;
 use App\Models\Book;
 use App\Models\Employee;
 use App\Models\Review;
@@ -20,31 +22,51 @@ class BooksController extends Controller
     }
 
     public function create(Request $req){
-        return view('Books.create',$data);
+        return view('Books.create');
     }
 
     public function store(Request $req){
         $book = new Book();
+        $isbn =$req->isbn;
 
         // もしすでに登録されている場合フォームへ戻す
-        if (Book::find($req->isbn)){
-            return view('Books.create');
+        $exists = Book::where('isbn', $isbn)->exists();
+        if ($exists){
+            return redirect()->route('books.create')->withErrors(['isbn' => 'この本は既に登録されています。']);
         }
 
+        try {
         // OpenBDのAPIへリクエストを飛ばす
-        $response = Http::get("https://api.openbd.jp/v1/get?isbn={$req->isbn}");
+        $url = "https://api.openbd.jp/v1/get?isbn={$isbn}";
+
+     // 2. プロキシを指定し、タイムアウト時間（10秒）を設定してGETリクエストを送信
+        $response = Http::withOptions([
+            'proxy'   => 'http://172.16.61.1:3128', // プロキシサーバー
+            'timeout' => 10,                        // 応答を待つ最大秒数
+        ])->get($url, [
+            'isbn' => $isbn, // クエリパラメータとして自動で ?isbn=... に変換されます
+        ]);
+
+
+        } catch (ConnectionException $e) {
+            // タイムアウトや接続エラー時の処理
+            return view('Books.create')->with('error', '書籍データの取得に失敗しました。時間をおいて試してください。');
+        }
 
         //返されたデータをphpの配列へデコード
         $item = $response->json();
+        // dd($item); 
 
         //もしデータが空の場合フォームへ戻す
-        if (empty($item)){
-            return view('Books.create');
+        if (empty($item)|| is_null($item[0])){
+            return redirect()->route('books.create')
+                    ->withErrors(['isbn' => 'ISBNが正しくない、もしくはデータが存在しません']);
         }
 
         //opneBDから届いた書籍データを登録処理
         //opneBDが提供している要約データ名が「summary」なのでそこからデータを抜き出す
-        $summary = $item['summary'];
+        $summary = $item[0]['summary'];
+        // dd($summary);
 
         $book->isbn = (int)$summary['isbn'];
         $book->book_name = $summary['title'] ?? 'タイトル不明';
@@ -53,41 +75,30 @@ class BooksController extends Controller
 
         // booksテーブルにデータを保存するメソッドの実行
         $book->save();
-
+        // dd($book->book_name);
         // 登録したデータを照会画面に渡し、表示する
         $data =[
             'session_data' => $req->session()->get('session_data',0),
-            'record' =>  Book::find($req->isbn),
-            'reviews' => Review::find($req->isbn)
+            'record' =>  Book::where('isbn', $isbn)->first(),
+            'reviews' => Review::where('isbn', $isbn)->first()
         ];
         return view('Books.show',$data);
     }
 
-    public function erase(Request $req){
-        $isbn = $req->isbn;
-        $data=[
-            'record' => Book::find($isbn)
-        ];
-        return view('Books.delete',$data);
-    }
-
-    public function delete(Request $req){
-        $book = Book::find($isbn);
+    public function delete(Request $req){ 
+        $isbn =$req->isbn;
+        $book = Book::where('isbn', $isbn)->first();
         $book ->delete();
-        $data = [
-            // 'user' => Employees::find($req->employee_id),
-            'records' => Book::all()
-        ];
         return redirect()->action([BooksController::class,'index']);
     }
 
 
     public function show(Request $req){
+        $isbn = $req->isbn;
         $data =[
             'session_data' => $req->session()->get('session_data',0),
-            'isbn' => $req->isbn,
-            'bookRecord' => Book::find($req->isbn),
-            'reviews' => Review::find($req->isbn)
+            'record' =>  Book::where('isbn', $isbn)->first(),
+            'reviews' => Review::where('isbn', $isbn)->first()
         ];
         return view('Books.show',$data);
     }

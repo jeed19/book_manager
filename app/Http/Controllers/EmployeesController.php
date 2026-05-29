@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\Rules\Password; // パスワードルール
 use App\Models\Employee;
 use App\Models\Department;
@@ -159,14 +160,15 @@ class EmployeesController extends Controller
         // 1. 基本的な形式バリデーション
         $validator = Validator::make($req->all(), [
             'employee_id' => 'required|exists:employees,employee_id',
-            'new_display_name' => 'required|string|max:50',
+            'new_display_name' => 'required|string|max:' . Employee::DISPLAY_NAME_MAX,
             'current_password' => 'required|string', // ★必須項目にする
             'new_password' => $this->passwordRules(true), 
         ], [
             'new_display_name.required' => '表示名を入力してください。',
+            'new_display_name.max' => '表示名は' . Employee::DISPLAY_NAME_MAX . '文字以内で入力してください。',
             'current_password.required' => '現在のパスワードを入力してください。',
-            'new_password.min' => '新しいパスワードは8文字以上で入力してください。',
-            'new_password.max' => '新しいパスワードは32文字以内で入力してください。',
+            'new_password.min' => '新しいパスワードは' . Employee::RAW_PASSWORD_MIN . '文字以上で入力してください。',
+            'new_password.max' => '新しいパスワードは' . Employee::RAW_PASSWORD_MAX . '文字以内で入力してください。',
             'new_password.confirmed' => '確認用のパスワードと一致しません。',
         ]);
 
@@ -262,8 +264,8 @@ class EmployeesController extends Controller
         // 基本のルール：文字列、8〜32文字、英大文字・小文字・数字混在
         $rule = [
             'string',
-            Password::min(8)
-                ->max(32)
+            Password::min(Employee::RAW_PASSWORD_MIN)
+                ->max(Employee::RAW_PASSWORD_MAX)
                 ->letters()   // アルファベット必須
                 ->mixedCase() // 大文字小文字混在必須
                 ->numbers(),  // 数字必須
