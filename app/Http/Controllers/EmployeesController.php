@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
@@ -18,6 +19,7 @@ class EmployeesController extends Controller
      */
     public function login(Request $req)
     {
+        
         // 1. 形式のバリデーション（existsはセキュリティのため外す）
         $validator = Validator::make($req->all(), [
             'employee_id' => 'required|integer|digits:8',
@@ -80,13 +82,12 @@ class EmployeesController extends Controller
             'department_id'   => $employee->department_id,
             'employee_name'   => $employee->employee_name,
             'display_name'    => $employee->display_name,
-            'can_register'    => $department ? $department->can_register_book : false,
+            'can_register_book'    => $department ? $department->can_register_book : false,
             'can_unlock'      => $department ? $department->can_unlock : false,
         ];
 
         // セッション開始
         $req->session()->put('session_data', $employee_data);
-
         return redirect()->action([BooksController::class, 'index']);
     }
 
@@ -279,5 +280,23 @@ class EmployeesController extends Controller
         }
 
         return $rule;
+    }
+
+    /**
+     * 従業員のログアウト処理
+     */
+    public function logout(Request $request)
+    {
+        // 1. 認証解除
+        Auth::logout();
+
+        // 2. 現在のセッションにあるデータをすべて削除
+        $request->session()->invalidate();
+
+        // 3. セッションのCSRFトークンを再生成（セッション固定攻撃の防止）
+        $request->session()->regenerateToken();
+
+        // 4. 任意のページ（例: ログイン画面）へリダイレクト
+        return redirect()->to('/');
     }
 }

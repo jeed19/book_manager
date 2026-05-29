@@ -13,8 +13,8 @@ Route::get('books/create', function () {
     return view('books/create');
 })->name('books.create');
 
-Route::post('/book_manager/login',[UsersController::class,'login']);
-Route::get('books/index',[BooksController::class,'index']);
+Route::post('/book_manager/login',[EmployeesController::class,'login']);
+Route::get('books/index',[BooksController::class,'books.index']);
 
 Route::post('/book_manager/login',[EmployeesController::class,'login']);
 
@@ -44,3 +44,7 @@ Route::get('books/{isbn}/reviews/show', [ReviewsController::class, 'show'])->nam
 Route::post('books/{isbn}/reviews/delete', [ReviewsController::class, 'delete'])->name('reviews.delete');
 Route::get('/my-reviews', [ReviewsController::class, 'index'])->name('reviews.index');
 Route::post('/reviews/store/{isbn}', [App\Http\Controllers\ReviewsController::class, 'store'])->name('reviews.store');
+
+
+// ログアウト
+Route::post('/logout', [EmployeesController::class, 'logout'])->name('logout');

@@ -7,11 +7,7 @@
     <link rel="stylesheet" href="{{ asset('css/books/create.css') }}">
 </head>
 <body>
-    <form action="{{ route('create.submit') }}" method="post">
-        @csrf
-        ISBN:<input type="number" name="isbn"  required>
-        <input type="submit" value="書籍登録">
-    </form>
+
     <header>
         <h1>書籍管理システム</h1>
     </header>
@@ -19,7 +15,7 @@
     <main>
         <div class="form-container">
             <h2>書籍登録</h2>
-            <form action="/books/show" method="post">
+            <form action="{{ route('create.submit') }}" method="post">
                 @csrf
                 <div class="form-group">
                     <label>書籍名</label>
