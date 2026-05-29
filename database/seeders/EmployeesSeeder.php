@@ -25,15 +25,6 @@ class EmployeesSeeder extends Seeder
             'locked_at' => null
         ]);
         DB::table('employees')->insert([
-            'employee_id' => 14000000,
-            'password' => Hash::make('Ict202601'),
-            'department_id' => 900,
-            'employee_name' => '総務 太郎',
-            'display_name' => 'ソーリー',
-            'login_failure_count' => 0,
-            'locked_at' => null
-        ]);
-        DB::table('employees')->insert([
             'employee_id' => 16000000,
             'password' => Hash::make('Ict202601'),
             'department_id' => 300,
@@ -48,6 +39,15 @@ class EmployeesSeeder extends Seeder
             'department_id' => 500,
             'employee_name' => '開発 太郎',
             'display_name' => 'グラマー',
+            'login_failure_count' => 0,
+            'locked_at' => null
+        ]);
+        DB::table('employees')->insert([
+            'employee_id' => 90000000,
+            'password' => Hash::make('Ict202601'),
+            'department_id' => 900,
+            'employee_name' => '総務 太郎',
+            'display_name' => 'ソーリー',
             'login_failure_count' => 0,
             'locked_at' => null
         ]);
