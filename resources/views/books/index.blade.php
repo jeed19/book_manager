@@ -18,13 +18,12 @@
                 <td>{{$record->cover_image}}</td>
                 <td>
                         <form action="{{ route('show.submit') }}" method="POST">
-                             @csrf
+                            @csrf
                             <input type="hidden" name="isbn" value="{{$record->isbn}}">
                             <button type="submit" >書籍照会</button>
                         </form>
 
                 <td>
-                    <a href="{{ route('reviews.edit', ['isbn' => $record->isbn]) }}">感想を書く/編集</a>
                 </td>
             </tr>
             @endforeach
@@ -33,7 +32,7 @@
 
     
 
-       <form action="/books/show" method="POST">
+        <form action="/books/show" method="POST">
             <input type="hidden" name="isbn" value="{{$record->isbn}}">
             <button type="submit" class="btn-show"></button>
         </form>
