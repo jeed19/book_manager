@@ -22,7 +22,12 @@
         </tr>  
     </table>
 
-    <a href="/books/create">AAA</a>
+    <a href="/books/create">書籍作成</a>
+
+       <form action="/books/show" method="POST">
+            <input type="hidden" name="isbn" value="{{$record->isbn}}">
+            <button type="submit" class="btn-show"></button>
+        </form>
 
 </body>
 </html>
