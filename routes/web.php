@@ -13,11 +13,11 @@ Route::get('books/create', function () {
     return view('books/create');
 })->name('books.create');
 
-Route::get('books/index',[BooksController::class,'index']);
-
 Route::post('/book_manager/login',[UsersController::class,'login']);
 
-Route::post('books/show',[BooksController::class,'store']);
+Route::post('/book_manager/books/show',[BooksController::class,'show'])->name('show.submit');
+
+Route::post('books/store',[BooksController::class,'store'])->name('create.submit');
 
 Route::delete('books/index',[BooksController::class,'delete'])->name('delete.submit');
 Route::get('/Books/index', [BooksController::class, 'index'])->name('books.index'); // 書籍一覧

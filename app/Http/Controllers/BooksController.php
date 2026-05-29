@@ -14,6 +14,7 @@ use App\Models\Review;
 class BooksController extends Controller
 {
     public function index(Request $req){
+        
         $data = [
             'session_data' => $req->session()->get('session_data',0),
             'records' => Book::all()
@@ -26,6 +27,7 @@ class BooksController extends Controller
     }
 
     public function store(Request $req){
+        
         $book = new Book();
         $isbn =$req->isbn;
 
@@ -79,9 +81,10 @@ class BooksController extends Controller
         // 登録したデータを照会画面に渡し、表示する
         $data =[
             'session_data' => $req->session()->get('session_data',0),
-            'record' =>  Book::where('isbn', $isbn)->first(),
+            'record' =>  $book,
             'reviews' => Review::where('isbn', $isbn)->first()
         ];
+        
         return view('Books.show',$data);
     }
 

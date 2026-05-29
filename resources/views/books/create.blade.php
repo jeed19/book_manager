@@ -6,7 +6,7 @@
     <title>Document</title>
 </head>
 <body>
-    <form action="/books/show" method="post">
+    <form action="{{ route('create.submit') }}" method="post">
         @csrf
         ISBN:<input type="number" name="isbn"  required>
         <input type="submit" value="書籍登録">
