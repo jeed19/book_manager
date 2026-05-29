@@ -15,7 +15,7 @@ Route::get('books/create', function () {
 
 Route::get('books/index',[BooksController::class,'index']);
 
-Route::post('/book_manager/login',[UsersController::class,'login']);
+Route::post('/book_manager/login',[EmployeesController::class,'login']);
 
 Route::post('books/show',[BooksController::class,'store']);
 
