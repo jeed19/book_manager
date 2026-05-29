@@ -20,7 +20,6 @@
             @endforeach
         </tr>  
     </table>
-<<<<<<< HEAD
 
     <a href="/books/create">書籍作成</a>
 
@@ -29,7 +28,6 @@
             <button type="submit" class="btn-show"></button>
         </form>
 
-=======
     <br>
     <ul>
     <li><a href="/Employees/edit">ユーザ表示名・パスワード変更</a></li>
@@ -38,6 +36,5 @@
     <li><a href="/Employees/index" style="color: blue; font-weight: bold;">【管理者用】アカウントロック解除画面</a></li>
     @endif
 </ul>
->>>>>>> aa0d0b048d4b580252e2c03e923591aecaac2385
 </body>
 </html>
