@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>ラクーン社所有 書籍一覧</title>
 </head>
 <body>
-
-    <p>従業員名：{{$session_data['employee_name']}}</p>
+    <p>ようこそ、{{$session_data['display_name']}} さん！</p>
 
     <table>
         <tr><th>ISBN</th><th>タイトル</th><th>著者名</th><th>画像</th>
@@ -21,6 +20,7 @@
             @endforeach
         </tr>  
     </table>
+<<<<<<< HEAD
 
     <a href="/books/create">書籍作成</a>
 
@@ -29,5 +29,15 @@
             <button type="submit" class="btn-show"></button>
         </form>
 
+=======
+    <br>
+    <ul>
+    <li><a href="/Employees/edit">ユーザ表示名・パスワード変更</a></li>
+    
+    @if(session('session_data')['can_unlock'])
+    <li><a href="/Employees/index" style="color: blue; font-weight: bold;">【管理者用】アカウントロック解除画面</a></li>
+    @endif
+</ul>
+>>>>>>> aa0d0b048d4b580252e2c03e923591aecaac2385
 </body>
 </html>

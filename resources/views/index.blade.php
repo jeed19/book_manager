@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>ラクーン社 書籍管理システム</title>
 </head>
 <body>
     <h1>ラクーン社 書籍管理システム</h1>

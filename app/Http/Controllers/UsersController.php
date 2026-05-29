@@ -60,4 +60,33 @@ class UsersController extends Controller
     return redirect()->action([BooksController::class,'index']);
 
     }
+
+    public function edit(Request $req){
+        if($req->isMethod('get')){
+            return view('Users.edit');
+        } elseif($req->isMethod('post')){
+            $data = [
+                'record' => Employee::where('employee_id', $req->employee_id)->first()
+            ];
+            return view('Users.edit',$data);
+        } else {
+            redirect('/');
+        }
+    }
+
+    public function update(Request $req){
+        $article = Employee::find($req->id);
+
+        $article->user_name = $req->user_name;
+        $article->posted_item = $req->posted_item;
+
+        $article->save();
+
+        $data = [
+            'id' => $req->id,
+            'user_name' => $req->user_name,
+            'posted_item' => $req->posted_item
+        ];
+        return view('db.update',$data);
+    }
 }
