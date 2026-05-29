@@ -72,7 +72,7 @@ class ReviewsController extends Controller
         }
 
         //指定されたIDのレビューを取得
-        $review = Review::find($id);
+        $review = Review::find($isbn);
 
         //レビューが存在しない場合、書籍一覧に戻す
         if(!$review){
