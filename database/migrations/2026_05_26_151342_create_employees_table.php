@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Models\Employee;
 
 return new class extends Migration
 {
@@ -16,7 +17,7 @@ return new class extends Migration
             $table->string('password',128); //ハッシュ化されて保存される
             $table->integer('department_id'); //部署ID
             $table->string('employee_name',32); //本名。変更不可
-            $table->string('display_name',32); //表示名
+            $table->string('display_name', Employee::DISPLAY_NAME_MAX); //表示名
             $table->integer('login_failure_count'); //ログイン失敗回数。一定回数失敗するとログイン制限される
             $table->datetime('locked_at')->nullable(); //ログインロックされた日時。nullでなければロック中判定
             // $table->dateTime('joining_date'); //入社日用
