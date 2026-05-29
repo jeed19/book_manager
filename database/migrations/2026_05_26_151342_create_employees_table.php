@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('employee_name',32); //本名。変更不可
             $table->string('display_name',32); //表示名
             $table->integer('login_failure_count'); //ログイン失敗回数。一定回数失敗するとログイン制限される
-            $table->datetime('locked_at')->nullable();; //ログインロックされた日時。nullでなければロック中判定
+            $table->datetime('locked_at')->nullable(); //ログインロックされた日時。nullでなければロック中判定
             // $table->dateTime('joining_date'); //入社日用
         });
     }
