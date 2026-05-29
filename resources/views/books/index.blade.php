@@ -33,11 +33,6 @@
 
     
 
-       <form action="/books/show" method="POST">
-            <input type="hidden" name="isbn" value="{{$record->isbn}}">
-            <button type="submit" class="btn-show"></button>
-        </form>
-
     <br>
     <ul>
         <li><a href="/books/create">書籍作成</a></li>
