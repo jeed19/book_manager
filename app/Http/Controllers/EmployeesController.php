@@ -13,31 +13,6 @@ use App\Http\Controllers\BooksController;
 class EmployeesController extends Controller
 {
     /**
-     * パスワードの共通バリデーションルールを定義
-     */
-    private function passwordRules($isUpdate = false)
-    {
-        // 基本のルール：文字列、8〜32文字、英大文字・小文字・数字混在
-        $rule = [
-            'string',
-            Password::min(8)
-                ->max(32)
-                ->letters()   // アルファベット必須
-                ->mixedCase() // 大文字小文字混在必須
-                ->numbers(),  // 数字必須
-        ];
-
-        // ログイン時は「必須(required)」、更新時は「空欄でもOK(nullable)」と「確認欄一致(confirmed)」
-        if ($isUpdate) {
-            array_unshift($rule, 'nullable', 'confirmed');
-        } else {
-            array_unshift($rule, 'required');
-        }
-
-        return $rule;
-    }
-
-    /**
      * ログイン処理
      */
     public function login(Request $req)
@@ -95,17 +70,52 @@ class EmployeesController extends Controller
 
         // ログイン成功後処理
         $employee = Employee::where('employee_id', $req->employee_id)->first();
+        
+        // ★追記：部署マスターから権限フラグを取得する
+        $department = \App\Models\Department::find($employee->department_id);
+
         $employee_data = [
-            'employee_id' => $employee->employee_id,
-            'department_id' => $employee->department_id,
-            'employee_name' => $employee->employee_name,
-            'display_name' => $employee->display_name,
+            'employee_id'     => $employee->employee_id,
+            'department_id'   => $employee->department_id,
+            'employee_name'   => $employee->employee_name,
+            'display_name'    => $employee->display_name,
+            'can_register'    => $department ? $department->can_register_book : false,
+            'can_unlock'      => $department ? $department->can_unlock : false,
         ];
 
         // セッション開始
         $req->session()->put('session_data', $employee_data);
 
         return redirect()->action([BooksController::class, 'index']);
+    }
+
+    /**
+     * 社員管理画面（社員一覧 兼 ロック解除画面）
+     */
+    public function index(Request $req)
+    {
+        // 1. 認可チェック（Fail-Fast）
+        $session_data = $req->session()->get('session_data');
+        if (!$session_data) {
+            return redirect('/');
+        }
+
+        // ログイン中の部署の権限を調べる
+        $department = Department::find($session_data['department_id']);
+        
+        // ロック解除権限がない部署の場合は弾く
+        if (!$department || !$department->can_unlock) {
+            return redirect()->action([BooksController::class, 'index'])
+                ->withErrors(['auth_failed' => '社員管理画面へのアクセス権限がありません。']);
+        }
+
+        // 2. データ取得（★変更：全社員のデータを取得する）
+        $employees = Employee::all();
+
+        // 3. 画面表示
+        return view('Employees.index', [
+            'employees' => $employees // ★全社員データをビューに渡す
+        ]);
     }
 
     /**
@@ -212,18 +222,15 @@ class EmployeesController extends Controller
      */
     public function unlock(Request $req)
     {
-        // 1. 認可チェック
+        // 1. 認可チェック（Fail-Fast）
         $session_data = $req->session()->get('session_data');
         if (!$session_data) {
             return redirect('/');
         }
 
-        // ログイン中の部署データをマスターから取得
         $department = Department::find($session_data['department_id']);
-
-        // 部署が存在しない、またはロック解除権限（can_unlock）が 1 でなければ即弾く（Fail-Fast）
         if (!$department || !$department->can_unlock) {
-            return redirect()->back()->withErrors(['auth_failed' => 'あなたにはアカウントロックを解除する権限がありません。']);
+            return redirect('/')->withErrors(['auth_failed' => 'この操作を行う権限がありません。']);
         }
 
         // 2. バリデーション
@@ -235,16 +242,40 @@ class EmployeesController extends Controller
             return redirect()->back()->withErrors($validator);
         }
 
-        // 3. ロック解除処理
+        // 3. ロック解除
         $employee = Employee::where('employee_id', $req->employee_id)->first();
-        
         if ($employee) {
-            $employee->locked_at = null;           // ロック日時をクリア
-            $employee->login_failure_count = 0;   // 失敗カウンターもリセット
+            $employee->locked_at = null;
+            $employee->login_failure_count = 0;
             $employee->save();
         }
 
-        // 元の画面（一覧画面など）にメッセージ付きでリダイレクト
-        return redirect()->back()->with('status', "社員ID: {$employee->employee_id} のロックを解除しました。");
+        return redirect('/Employees/index')
+            ->with('status', "社員ID: {$employee->employee_id} のロックを解除しました。");
+    }
+
+    /**
+     * パスワードの共通バリデーションルールを定義
+     */
+    private function passwordRules($isUpdate = false)
+    {
+        // 基本のルール：文字列、8〜32文字、英大文字・小文字・数字混在
+        $rule = [
+            'string',
+            Password::min(8)
+                ->max(32)
+                ->letters()   // アルファベット必須
+                ->mixedCase() // 大文字小文字混在必須
+                ->numbers(),  // 数字必須
+        ];
+
+        // ログイン時は「必須(required)」、更新時は「空欄でもOK(nullable)」と「確認欄一致(confirmed)」
+        if ($isUpdate) {
+            array_unshift($rule, 'nullable', 'confirmed');
+        } else {
+            array_unshift($rule, 'required');
+        }
+
+        return $rule;
     }
 }
