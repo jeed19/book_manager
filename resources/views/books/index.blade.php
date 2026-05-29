@@ -22,6 +22,9 @@
                             <input type="hidden" name="isbn" value="{{$record->isbn}}">
                             <button type="submit" >書籍照会</button>
                         </form>
+
+                <td>
+                    <a href="{{ route('reviews.edit', ['isbn' => $record->isbn]) }}">感想を書く/編集</a>
                 </td>
             </tr>
             @endforeach
@@ -29,6 +32,11 @@
     </table>
 
     
+
+       <form action="/books/show" method="POST">
+            <input type="hidden" name="isbn" value="{{$record->isbn}}">
+            <button type="submit" class="btn-show"></button>
+        </form>
 
     <br>
     <ul>
