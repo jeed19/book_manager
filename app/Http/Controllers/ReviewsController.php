@@ -64,7 +64,7 @@ class ReviewsController extends Controller
 
     }
     //レビュー画面の単体表示
-    public function show(Request $req, $id)
+    public function show(Request $req, $isbn)
     {
         $session_data = $req->session()->get('session_data');
         if(!$session_data){
@@ -174,7 +174,7 @@ class ReviewsController extends Controller
     }
 
     //感想コメント削除実行
-    public function delete(Request $req, $id)
+    public function delete(Request $req, $isbn)
     {
         $session_data = $req->session()->get('session_data');
         if(!$session_data){
