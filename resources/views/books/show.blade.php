@@ -56,18 +56,20 @@
             
             <section class="right-top">
                 <h4>あなたの評価とコメント</h4>
-                <form action="#" method="POST" id="comment-form">
+                <form action="{{ route('reviews.store', ['isbn' => $record->isbn]) }}" method="POST" id="comment-form">
                     @csrf
                     
                     <div class="star-rating">
-                        <input type="radio" id="star5" name="rating" value="5"><label for="star5">★</label>
-                        <input type="radio" id="star4" name="rating" value="4"><label for="star4">★</label>
-                        <input type="radio" id="star3" name="rating" value="3"><label for="star3">★</label>
-                        <input type="radio" id="star2" name="rating" value="2"><label for="star2">★</label>
-                        <input type="radio" id="star1" name="rating" value="1"><label for="star1">★</label>
+                        <input type="radio" id="star5" name="recommended_level" value="5" {{ ($review && $review->recommended_level == 5) ? 'checked' : ''}}><label for="star5">★</label>
+                        <input type="radio" id="star4" name="recommended_level" value="4" {{ ($review && $review->recommended_level == 4) ? 'checked' : ''}}><label for="star4">★</label>
+                        <input type="radio" id="star3" name="recommended_level" value="3" {{ ($review && $review->recommended_level == 3) ? 'checked' : ''}}><label for="star3">★</label>
+                        <input type="radio" id="star2" name="recommended_level" value="2" {{ ($review && $review->recommended_level == 2) ? 'checked' : ''}}><label for="star2">★</label>
+                        <input type="radio" id="star1" name="recommended_level" value="1" {{ ($review && $review->recommended_level == 1) ? 'checked' : ''}}><label for="star1">★</label>
                     </div>
 
-                    <textarea name="comment" class="comment-area" rows="4" placeholder="評価コメントを入力欄に記入してください"></textarea>
+                    <input type="text" name='title' class="title-input" placeholder="タイトル（５０文字以内）" maxlength="50" value="{{ $review ? $review->title : '' }}" required>
+
+                    <textarea name="comment" class="comment-area" rows="4" placeholder="評価コメントを入力欄に記入してください">{{ $review ? $review->comment : '' }}</textarea>
                     
                     <button type="submit">コメントを編集する</button>
                 </form>
@@ -81,6 +83,6 @@
         </div>
     </main>
 
-    {{ dd($record->isbn) }}
+    <!-- {{ dd($record->isbn) }} -->
 </body>
 </html>
