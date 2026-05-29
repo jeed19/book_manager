@@ -16,6 +16,10 @@
                 <td>{{$record->book_name}}</td>
                 <td>{{$record->author_name}}</td>
                 <td>{{$record->cover_image}}</td>
+
+                <td>
+                    <a href="{{ route('reviews.edit', ['isbn' => $record->isbn]) }}">感想を書く/編集</a>
+                </td>
             </tr>
             @endforeach
         </tr>  

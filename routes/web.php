@@ -32,8 +32,11 @@ Route::get('/Employees/index', [EmployeesController::class, 'index']);
 // ロック解除処理
 Route::post('/Employees/unlock', [EmployeesController::class, 'unlock']);
 
-Route::post('/book_manager/login',[EmployeesController::class,'login']);
+// レビュー画面
+Route::get('books/{isbn}/show', [BooksController::class, 'show'])->name('books.show');
 Route::get('/books/{isbn}/reviews/edit',[ReviewsController::class,'edit'])->name('reviews.edit');
 Route::post('/books/{isbn}/reviews',[ReviewsController::class,'store'])->name('reviews.store');
 Route::get('reviews/{id}/erase',[ReviewsController::class,'delete'])->name('reviews.erase');
-Route::post('reviews/{id}/delete',[ReviewsController::class,'delete'])->name('reviews.delete');
+Route::get('books/{isbn}/reviews/show', [ReviewsController::class, 'show'])->name('reviews.show');
+Route::post('books/{isbn}/reviews/delete', [ReviewsController::class, 'delete'])->name('reviews.delete');
+Route::get('/my-reviews', [ReviewsController::class, 'index'])->name('reviews.index');
