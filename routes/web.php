@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\UsersController;
+use App\Http\Controllers\EmployeesController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BooksController;
 
@@ -8,6 +8,10 @@ Route::get('/', function () {
     return view('index');
 });
 
-Route::get('books/index',[BooksController::class,'index']);
+Route::get('books/index',[BooksController::class,'index']); // 書籍一覧
 
-Route::post('/book_manager/login',[UsersController::class,'login']);
+Route::post('/book_manager/login',[EmployeesController::class,'login']);
+
+Route::get('employees/edit',[EmployeesController::class,'edit']); // ユーザ表示名更新画面
+Route::post('employees/edit',[EmployeesController::class,'edit']); // ユーザ表示名更新画面
+Route::post('employees/update',[EmployeesController::class,'update']); // ユーザ表示名更新
