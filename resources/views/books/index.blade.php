@@ -21,5 +21,8 @@
             @endforeach
         </tr>  
     </table>
+
+    <a href="/books/create">AAA</a>
+
 </body>
 </html>
