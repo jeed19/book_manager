@@ -21,6 +21,6 @@
         </tr>  
     </table>
     <br>
-    <p><a href="/Books/update">ユーザ表示名変更</a></p>
+    <p><a href="/Employees/edit">ユーザ表示名変更</a></p>
 </body>
 </html>

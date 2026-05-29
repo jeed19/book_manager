@@ -13,9 +13,12 @@ Route::get('books/index',[BooksController::class,'index']); // 書籍一覧
 
 Route::post('/book_manager/login',[EmployeesController::class,'login']);
 
-Route::get('employees/edit',[EmployeesController::class,'edit']); // ユーザ表示名更新画面
-Route::post('employees/edit',[EmployeesController::class,'edit']); // ユーザ表示名更新画面
-Route::post('employees/update',[EmployeesController::class,'update']); // ユーザ表示名更新
+Route::get('Employees/edit',[EmployeesController::class,'edit']); // ユーザ表示名更新画面
+Route::post('Employees/update',[EmployeesController::class,'update']); // ユーザ表示名更新
+
+// ロック解除処理
+Route::post('/Employees/unlock', [EmployeesController::class, 'unlock']);
+
 Route::post('/book_manager/login',[EmployeesController::class,'login']);
 Route::get('/books/{isbn}/reviews/edit',[ReviewsController::class,'edit'])->name('reviews.edit');
 Route::post('/books/{isbn}/reviews',[ReviewsController::class,'store'])->name('reviews.store');
