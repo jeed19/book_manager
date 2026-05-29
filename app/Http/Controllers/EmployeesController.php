@@ -19,6 +19,7 @@ class EmployeesController extends Controller
      */
     public function login(Request $req)
     {
+        
         // 1. 形式のバリデーション（existsはセキュリティのため外す）
         $validator = Validator::make($req->all(), [
             'employee_id' => 'required|integer|digits:8',
@@ -87,7 +88,6 @@ class EmployeesController extends Controller
 
         // セッション開始
         $req->session()->put('session_data', $employee_data);
-
         return redirect()->action([BooksController::class, 'index']);
     }
 
