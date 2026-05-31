@@ -60,16 +60,16 @@
                     @csrf
                     
                     <div class="star-rating">
-                        <input type="radio" id="star5" name="recommended_level" value="5" {{ ($review && $review->recommended_level == 5) ? 'checked' : ''}}><label for="star5">★</label>
-                        <input type="radio" id="star4" name="recommended_level" value="4" {{ ($review && $review->recommended_level == 4) ? 'checked' : ''}}><label for="star4">★</label>
-                        <input type="radio" id="star3" name="recommended_level" value="3" {{ ($review && $review->recommended_level == 3) ? 'checked' : ''}}><label for="star3">★</label>
-                        <input type="radio" id="star2" name="recommended_level" value="2" {{ ($review && $review->recommended_level == 2) ? 'checked' : ''}}><label for="star2">★</label>
-                        <input type="radio" id="star1" name="recommended_level" value="1" {{ ($review && $review->recommended_level == 1) ? 'checked' : ''}}><label for="star1">★</label>
+                        <input type="radio" id="star5" name="recommended_level" value="5" {{ ($reviews && $reviews->recommended_level == 5) ? 'checked' : ''}}><label for="star5">★</label>
+                        <input type="radio" id="star4" name="recommended_level" value="4" {{ ($reviews && $reviews->recommended_level == 4) ? 'checked' : ''}}><label for="star4">★</label>
+                        <input type="radio" id="star3" name="recommended_level" value="3" {{ ($reviews && $reviews->recommended_level == 3) ? 'checked' : ''}}><label for="star3">★</label>
+                        <input type="radio" id="star2" name="recommended_level" value="2" {{ ($reviews && $reviews->recommended_level == 2) ? 'checked' : ''}}><label for="star2">★</label>
+                        <input type="radio" id="star1" name="recommended_level" value="1" {{ ($reviews && $reviews->recommended_level == 1) ? 'checked' : ''}}><label for="star1">★</label>
                     </div>
 
-                    <input type="text" name='title' class="title-input" placeholder="タイトル（５０文字以内）" maxlength="50" value="{{ $review ? $review->title : '' }}" required>
+                    <input type="text" name='title' class="title-input" placeholder="タイトル（５０文字以内）" maxlength="50" value="{{ $reviews ? $reviews->title : '' }}" required>
 
-                    <textarea name="comment" class="comment-area" rows="4" placeholder="評価コメントを入力欄に記入してください">{{ $review ? $review->comment : '' }}</textarea>
+                    <textarea name="comment" class="comment-area" rows="4" placeholder="評価コメントを入力欄に記入してください">{{ $reviews ? $reviews->comment : '' }}</textarea>
                     
                     <button type="submit">コメントを編集する</button>
                 </form>
