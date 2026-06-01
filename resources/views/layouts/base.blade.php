@@ -18,7 +18,7 @@
         <nav class="header-nav">
             <ul class="menu-list">
                 @if(session('session_data')['can_register_book'])
-                    <li><a href="/books/create" class="create-book-link">書籍作成</a></li>
+                    <li><a href="/books/create" class="create-book-link">書籍登録</a></li>
                 @endif
                 
                 <li><a href="/employees/edit">ユーザ表示名・パスワード変更</a></li>
