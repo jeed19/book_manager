@@ -19,6 +19,7 @@ class BooksController extends Controller
             'session_data' => $req->session()->get('session_data',0),
             'records' => Book::all()
         ];
+
         return view('Books.index',$data);
     }
 
@@ -70,6 +71,50 @@ class BooksController extends Controller
         $summary = $item[0]['summary'];
         // dd($summary);
 
+        // OpenBDで画像URLが存在しない場合、GoogleBookAPIから取得を試みる
+        if(!$summary['cover']){
+            // 1. APIキーの存在チェック（fail-fast）
+            
+            $apiKey = config('services.google.books_api_key');
+            if (!empty($apiKey)) {
+                // 検索キーワード（例: ISBN: 9784041026441）　
+                $keyword = "isbn:{$isbn}";
+                $url = 'https://www.googleapis.com/books/v1/volumes';
+
+                // 2. APIリクエストの送信（クエリパラメータに 'key' を追加）
+                    $response = Http::withOptions([
+                        'proxy'   => 'http://172.16.61.1:3128', // プロキシサーバー
+                        'timeout' => 10,                        // 応答を待つ最大秒数
+                    ])->get($url, [
+                        'q'          => $keyword,
+                        'maxResults' => 1,
+                        'key'        => $apiKey, // ここでAPIキーを渡す
+                    ]);
+
+
+                // 3. レスポンスの成否チェック
+                if (!$response->failed()) {
+                    $data = $response->json();
+
+                    // 4. 該当データの存在チェック
+                    if (isset($data['items']) || !count($data['items']) === 0) {
+                        $volumeInfo = $data['items'][0]['volumeInfo'];
+                        $imageUrl = null;
+
+                        // 5. 書影URLの抽出とHTTPS変換
+                        if (isset($volumeInfo['imageLinks'])) {
+                            $imageUrl = $volumeInfo['imageLinks']['thumbnail'] ?? $volumeInfo['imageLinks']['smallThumbnail'] ?? null;
+                            if ($imageUrl) {
+                                // 混在コンテンツ（Mixed Content）対策として、必ずhttpsに置換
+                                $imageUrl = str_replace('http://', 'https://', $imageUrl);
+                                $summary['cover'] = $imageUrl;
+                            }
+                        }   
+                    }
+                }
+            }
+        }
+        
         $book->isbn = (int)$summary['isbn'];
         $book->book_name = $summary['title'] ?? 'タイトル不明';
         $book->author_name = $summary['author'] ?? '著者不明';
