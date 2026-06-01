@@ -3,18 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>書籍登録</title>
+    <title>@yield('title', '書籍管理システム')</title>
+    {{-- 既存のCSS --}}
     <link rel="stylesheet" href="{{ asset('css/books/create.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/header.css') }}">
     @stack('page_styles')
 </head>
 <body>
-    <header>
-        <p>社内の書籍で管理している書籍を登録、管理を行います</p>
-        <h1>書籍管理システム</h1>
+    {{-- インラインスタイル(style="...")を外し、クラス名を付与 --}}
+    <header class="site-header">
+        <h1 class="header-title">
+            <a href="{{ route('books.index') }}">書籍管理システム</a>
+        </h1>
+        
+        <nav class="header-nav">
+            <ul class="menu-list">
+                @if(session('session_data')['can_register_book'])
+                    <li><a href="/books/create" class="create-book-link">書籍作成</a></li>
+                @endif
+                
+                <li><a href="/employees/edit">ユーザ表示名・パスワード変更</a></li>
+            
+                @if(session('session_data')['can_unlock'])
+                    <li><a href="/employees/index" class="admin-link">【管理者用】アカウントロック解除画面</a></li>
+                @endif
+                
+                {{-- リンク化したログアウト --}}
+                <li>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
+                    <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="logout-link">
+                        ログアウト
+                    </a>
+                </li>
+            </ul>
+        </nav>
     </header>
 
-    @section('main')
-    @show
-
+    <main>
+        @section('main')
+        @show
+    </main>
 </body>
 </html>
