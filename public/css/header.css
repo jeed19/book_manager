@@ -1,0 +1,82 @@
+/* ==========================================================================
+   ヘッダー専用スタイル
+   ========================================================================== */
+
+/* ヘッダー全体の背景とレイアウト（高さはH1タグ一行分に合わせる） */
+.site-header {
+    background-color: #333;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px; /* 上下の余白（H1の大きさに合わせて調整してください） */
+}
+
+/* H1タグの余白をリセット */
+.header-title {
+    margin: 0;
+    font-size: 1.5rem; /* H1のサイズ感 */
+}
+
+/* ナビゲーションとリストの横並び設定 */
+.header-nav .menu-list {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 20px; /* メニュー同士の間隔 */
+}
+
+/* --------------------------------------------------------------------------
+   ヘッダー内リンクの色固定（可読性重視）
+   ------------------------------------------------========================== */
+
+/* 書籍作成リンク（上品に目立たせるボタン風デザイン） */
+.site-header a.create-book-link,
+.site-header a.create-book-link:visited {
+    color: #ffffff !important;
+    background-color: #007bff; /* 爽やかなアクセントブルー */
+    padding: 6px 14px;         /* 文字の周りに少し余白を作ってボタン化 */
+    border-radius: 4px;        /* 角を少し丸める */
+    font-weight: bold;         /* 文字を太字に */
+    transition: background-color 0.2s ease; /* ホバー時のアニメーションを滑らかに */
+}
+
+/* 書籍作成リンク：ホバー時（マウスを乗せたとき） */
+.site-header a.create-book-link:hover {
+    background-color: #0056b3; /* 乗せたときは少し濃い青にして「押せる感」を出す */
+    color: #ffffff !important;
+    text-decoration: none;     /* ボタン風なので下線は不要 */
+}
+
+/* 全てのヘッダー内リンクの基本色（未訪問・訪問済・ホバーすべて白系に固定） */
+.site-header a,
+.site-header a:visited {
+    color: #ffffff !important; 
+    text-decoration: none; /* 下線を消す */
+    font-weight: 500;
+}
+
+/* マウスカーソルを乗せたとき（ホバー時）は少し薄くして反応を返す */
+.site-header a:hover {
+    color: #cccccc !important;
+    text-decoration: underline; /* ホバー時のみ下線を表示 */
+}
+
+/* 【管理者用】アカウントロック解除画面のリンク色（背景#333で見やすい薄い青） */
+.site-header a.admin-link,
+.site-header a.admin-link:visited {
+    color: #adc8ff !important; 
+}
+.site-header a.admin-link:hover {
+    color: #d1e2ff !important;
+}
+
+/* ログアウトリンク（必要であれば赤系の文字などにする場合） */
+.site-header a.logout-link {
+    color: #ff9999 !important; /* ほんのり赤い文字にして区別 */
+}
+.site-header a.logout-link:hover {
+    color: #ffcccc !important;
+}
