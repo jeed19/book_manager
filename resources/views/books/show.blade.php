@@ -1,19 +1,7 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>書籍照会画面</title>
+@extends('layouts.base')
+@push('page_styles')
     <style>
-        /* 新しいヘッダー用のスタイル（左右にボタンを配置） */
-        .header-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-            background-color: #f8f9fa;
-            border-bottom: 1px solid #ccc;
-            margin-bottom: 10px;
-        }
+
         /* ボタンの簡易スタイル（お好みで調整してください） */
         .btn-delete { background-color: #dc3545; color: white; border: none; padding: 6px 12px; cursor: pointer; border-radius: 4px; }
         .btn-submit { background-color: #28a745; color: white; border: none; padding: 6px 12px; cursor: pointer; border-radius: 4px; }
@@ -32,19 +20,9 @@
         
         .comment-area { width: 100%; margin: 10px 0; padding: 8px; box-sizing: border-box; }
     </style>
-</head>
-<body>
+@endpush
 
-    <header class="header-actions">
-        <form action="{{ route('delete.submit') }}" method="POST" onsubmit="return confirm('本当にこの書籍を削除しますか？');">
-            <input type="hidden" name="isbn" value="{{$record->isbn}}">
-            @csrf
-            @method('DELETE')
-            <button type="submit" class="btn-delete">書籍削除</button>
-        </form>
-
-        <button type="submit" form="comment-form" class="btn-submit">投稿</button>
-    </header>
+@section('main')
 
     <main class="screen-layout">
         
@@ -55,6 +33,13 @@
                         author="{{$record->author_name}}" 
                         image-url="{{$record->cover_image}}" 
             />
+
+            <form action="{{ route('delete.submit') }}" method="POST" onsubmit="return confirm('本当にこの書籍を削除しますか？');">
+                <input type="hidden" name="isbn" value="{{$record->isbn}}">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn-delete">書籍削除</button>
+            </form>
         </section>
 
         <div class="right-side">
@@ -77,6 +62,7 @@
                     <textarea name="comment" class="comment-area" rows="4" placeholder="評価コメントを入力欄に記入してください">{{ $reviews ? $reviews->comment : '' }}</textarea>
                     
                     <button type="submit">コメントを編集する</button>
+                    <button type="submit" form="comment-form" class="btn-submit">投稿</button>
                 </form>
             </section>
 
@@ -87,7 +73,4 @@
             
         </div>
     </main>
-
-    <!-- {{ dd($record->isbn) }} -->
-</body>
-</html>
+@endsection
