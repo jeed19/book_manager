@@ -125,6 +125,9 @@
                 @endif
 
                 <div style="text-align: right; margin-top: 20px; border-top: 1px dashed #ccc; padding-top: 15px;">
+                    <a href="{{ route('reviews.index') }}" class="btn-link" style="background-color: #6c757d;">
+                        マイコメント一覧へ
+                    </a>
                     <a href="{{ route('reviews.show', ['isbn' => $record->isbn]) }}" class="btn-link">
                         全てのレビュー詳細画面へ
                     </a>

@@ -85,7 +85,7 @@
             background-color: #2980b9;
         }
 
-        /* ⑥ ★追加：削除（赤）ボタンの装飾 */
+        /* ⑥ 追加：削除（赤）ボタンの装飾 */
         .btn-delete {
             background-color: #e74c3c;
             color: #fff;
@@ -105,14 +105,23 @@
 
         /* 戻るリンクの装飾 */
         .back-link {
-            display: block;
-            text-align: center;
-            margin-top: 25px;
             color: #3498db;
             text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
         }
         .back-link:hover {
             text-decoration: underline;
+        }
+        
+        /* 複数のリンクを並べるための新しいクラス */
+        .link-group {
+            display: flex;
+            justify-content: center;
+            gap: 30px; /* リンク同士の隙間 */
+            margin-top: 25px;
+            border-top: 1px dashed #ccc;
+            padding-top: 15px;
         }
     </style>
 </head>
@@ -151,6 +160,7 @@
         @if($review)
             <form action="{{ route('reviews.delete', ['isbn' => $book->isbn]) }}" method="POST" onsubmit="return confirm('本当にこのレビューを削除しますか？消したデータは元に戻せません。');">
                 @csrf
+                @method('DELETE')
                 <button type="submit" class="btn-delete">このレビューを削除する</button>
             </form>
         @endif
@@ -165,7 +175,10 @@
         </div>
         @endif
 
-        <a href="{{ route('reviews.index') }}" class="back-link">マイレビュー一覧に戻る</a>
+        <div class="link-group">
+            <a href="{{ route('books.show', ['isbn' => $book->isbn]) }}" class="back-link">← 書籍照会へ戻る</a>
+            <a href="{{ route('reviews.index') }}" class="back-link">マイレビュー一覧に戻る →</a>
+        </div>
     </div>
 </body>
 </html>
