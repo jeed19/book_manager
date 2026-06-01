@@ -2,14 +2,20 @@
 @section('main')
     <p>ようこそ、{{$session_data['display_name']}} さん！</p>
 
-    <table>
+    <table style="border-collapse: collapse; width: 100%;">
         <tr><th>ISBN</th><th>タイトル</th><th>著者名</th><th>画像</th>
             @foreach($records as $record)
             <tr>
                 <td>{{$record->isbn}}</td>
                 <td>{{$record->book_name}}</td>
                 <td>{{$record->author_name}}</td>
-                <td>{{$record->cover_image}}</td>
+                <td>
+                    <div class="book-image" style="flex-shrink: 0; width: 120px;">
+                        <img src="{{ $record->cover_image }}" 
+                        alt="" 
+                        style= "display: inline-block; width: 100%; height: auto; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                    </div>
+                </td>
                 <td>
                         <form action="{{ route('show.submit') }}" method="POST">
                             @csrf
