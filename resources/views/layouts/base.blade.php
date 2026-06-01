@@ -17,8 +17,6 @@
         
         <nav class="header-nav">
             <ul class="menu-list">
-                <p>ようこそ、{{$session_data['display_name']}} さん！</p>
-
                 @if(session('session_data')['can_register_book'])
                     <li><a href="/books/create" class="create-book-link">書籍作成</a></li>
                 @endif
