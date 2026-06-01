@@ -59,8 +59,8 @@ class ReviewsController extends Controller
                 'comment' => $req->comment,
             ]
         );
-        return redirect()->action([BooksController::class, 'show'], ['isbn' => $isbn])
-            ->with('success', '投稿しました');
+        return redirect()->route('books.show', ['isbn' => $isbn])
+                ->with('success', '投稿しました');
 
     }
     //レビュー画面の単体表示
@@ -84,10 +84,14 @@ class ReviewsController extends Controller
         //そのレビューが紐づく書籍情報を取得
         $book = Book::where('isbn', $review->isbn)->first();
 
+        $other_reviews = Review::where('isbn', $isbn)
+                                ->orderBy('created_at','desc')
+                                ->get();
         $data = [
             'session_data' => $session_data,
             'review' => $review,
             'book' => $book,
+            'other_reviews' => $other_reviews,
         ];
 
         return view('reviews.show',$data);
