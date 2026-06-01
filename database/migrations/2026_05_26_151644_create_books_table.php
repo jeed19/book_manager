@@ -15,7 +15,7 @@ return new class extends Migration
             $table->bigInteger('isbn')->primary(); //書籍識別ID用
             $table->string('book_name',100); //書籍名用
             $table->string('author_name',100)->nullable();; //著者名
-            $table->string('cover_image',100)->nullable();; //書籍画像
+            $table->string('cover_image',255)->nullable();; //書籍画像
             $table->timestamps(); //作成日時用
         });
     }
