@@ -9,9 +9,10 @@
                 <td>{{$record->isbn}}</td>
                 <td>{{$record->book_name}}</td>
                 <td>{{$record->author_name}}</td>
+
                 <td>
                     <div class="book-image" style="flex-shrink: 0; width: 120px;">
-                        <img src="{{ $record->cover_image }}" 
+                        <img src="{{$record->cover_image }}" 
                         alt="" 
                         style= "display: inline-block; width: 100%; height: auto; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
                     </div>
@@ -20,7 +21,6 @@
                         <a href="{{ route('books.show', ['isbn' => $record->isbn]) }}">
                             <button type="submit" style="cursor: pointer;">書籍照会</button>
                         </form>
-
                 <td>
                 </td>
             </tr>
@@ -39,4 +39,6 @@
         <li><a href="/employees/index" style="color: blue; font-weight: bold;">【管理者用】アカウントロック解除画面</a></li>
         @endif
     </ul>
+
+    
 @endsection

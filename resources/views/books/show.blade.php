@@ -31,7 +31,7 @@
             <!-- 共通パーツの呼び出し。データを属性として渡す -->
             <x-book-card title="{{$record->book_name}}" 
                         author="{{$record->author_name}}" 
-                        image-url="{{$record->cover_image}}" 
+                        image-url="{!! htmlspecialchars_decode($record->cover_image) !!}" 
             />
 
             <form action="{{ route('delete.submit') }}" method="POST" onsubmit="return confirm('本当にこの書籍を削除しますか？');">

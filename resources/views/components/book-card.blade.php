@@ -10,7 +10,7 @@
 ">
     <!-- 📸 左側：画像エリア -->
     <div class="book-image" style="flex-shrink: 0; width: 120px;">
-        <img src="{{ $imageUrl ?? asset('images/no-image.png') }}" 
+        <img src="{{$imageUrl}}" 
              alt="{{ $title }}" 
              style="width: 100%; height: auto; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
     </div>
