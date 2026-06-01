@@ -59,7 +59,8 @@ class ReviewsController extends Controller
                 'comment' => $req->comment,
             ]
         );
-        return redirect()->action([BooksController::class, 'show'], ['isbn' => $isbn]);
+        return redirect()->action([BooksController::class, 'show'], ['isbn' => $isbn])
+            ->with('success', '投稿しました');
 
     }
     //レビュー画面の単体表示
