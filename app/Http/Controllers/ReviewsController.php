@@ -175,7 +175,7 @@ class ReviewsController extends Controller
         $review->save();
 
         //更新後、書籍の詳細画面へ戻す
-        return redirect()->action([BooksController::class, 'show'], ['isbn' => $review->isbn])
+        return redirect()->route('reviews.show', ['isbn' => $review->isbn])
             ->with('success', 'レビューを更新しました');
 
     }
@@ -196,7 +196,7 @@ class ReviewsController extends Controller
         if($review && $review->employee_id == $session_data['employee_id']){
             $isbn = $review->isbn;  //リダイレクト用にisbnを控えておく
             $review->delete();
-            return redirect()->action([BooksController::class, 'show'],['isbn' => $isbn]);
+            return redirect()->route('books.show', ['isbn' => $isbn]);
         }
 
         return redirect()->back();
