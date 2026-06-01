@@ -35,7 +35,7 @@
 
                 <div class="form-group">
                     <label>ISBN</label>
-                    <input type="number" name="isbn" required>
+                    <input type="number" name="isbn" value="{{old('isbn')}}" required>
 
                     @error('isbn')
                     <div class="error">

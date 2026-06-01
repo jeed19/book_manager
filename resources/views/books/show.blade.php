@@ -49,7 +49,12 @@
     <main class="screen-layout">
         
         <section class="left-side">
-            @yield('book_info_content') 
+            <!-- @yield('book_info_content')  -->
+            <!-- 共通パーツの呼び出し。データを属性として渡す -->
+            <x-book-card title="{{$record->book_name}}" 
+                        author="{{$record->author_name}}" 
+                        image-url="{{$record->cover_image}}" 
+            />
         </section>
 
         <div class="right-side">
