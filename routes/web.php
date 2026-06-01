@@ -43,5 +43,7 @@ Route::get('/my-reviews', [App\Http\Controllers\ReviewsController::class, 'index
 Route::post('/books/{isbn}/reviews/delete', [App\Http\Controllers\ReviewsController::class, 'delete'])->name('reviews.delete');
 Route::get('book_manager/books/{isbn}/show', [App\Http\Controllers\ReviewsController::class, 'show'])->name('reviews.show');
 Route::get('book_manager/books/{isbn}/show', [BooksController::class, 'show'])->name('books.show');
+Route::get('book_manager/books/{isbn}/reviews', [App\Http\Controllers\ReviewsController::class, 'showReviewsDetail'])->name('reviews.show');
+
 // ログアウト
 Route::post('/logout', [EmployeesController::class, 'logout'])->name('logout');
