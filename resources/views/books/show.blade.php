@@ -79,16 +79,27 @@
                 @if(isset($other_reviews) && count($other_reviews) > 0)
                     @foreach($other_reviews as $other)
                         <div class="other-reviewsitem">
-                            <div class="other-reviewsname">
-                                投稿者: {{ $other->employee->display_name ?? 'ニックネーム:' . ($other->employee_name ?? '匿名') }}
+                            
+                            <div class="other-reviewstitle" style="font-size: 1.2em; border-bottom: 1px solid #eee; padding-bottom: 5px;">
+                                {{ $other->title }}
                             </div>
-                            <div class="other-reviewsstars">
+                            
+                            <div class="other-reviewsstars" style="margin-top: 5px;">
                                 {{ str_repeat('★',$other->recommended_level) }}{{ str_repeat('☆', 5 - $other->recommended_level) }}
                             </div>
-                            <div class="other-reviewstitle">{{ $other->title }}</div>
-                            <div class="other-reviewscomment">
+                            
+                            <div class="other-reviewscomment" style="margin-top: 10px;">
                                 {!! nl2br(e($other->comment)) !!}
                             </div>
+                            
+                            <div class="other-reviewsname" style="margin-top: 15px; font-size: 0.9em; color: #555;">
+                                投稿者: {{ $other->employee->display_name ?? 'ニックネーム:' . ($other->employee_name ?? '匿名') }}
+                            </div>
+                            
+                            <div class="other-reviewsdate" style="font-size: 0.8em; color: #999; text-align: right;">
+                                {{ $other->updated_at ? $other->updated_at->format('Y/m/d H:i') . ' 編集' : $other->created_at->format('Y/m/d H:i') . ' 投稿' }}
+                            </div>
+                            
                         </div>
                     @endforeach
                 @else

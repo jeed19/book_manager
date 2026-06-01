@@ -76,25 +76,21 @@ class ReviewsController extends Controller
                         ->where('employee_id', $session_data['employee_id'])
                         ->first();
 
-        //レビューが存在しない場合、書籍一覧に戻す
-        if(!$review){
-            return redirect()->action([BooksController::class,'index']);
-        }
-
         //そのレビューが紐づく書籍情報を取得
-        $book = Book::where('isbn', $review->isbn)->first();
+        $book = Book::where('isbn', $isbn)->first();
 
-        $other_reviews = Review::where('isbn', $isbn)
+        $other_reviews = Review::with('employee')
+                                ->where('isbn', $isbn)
                                 ->orderBy('created_at','desc')
                                 ->get();
         $data = [
             'session_data' => $session_data,
-            'review' => $review,
-            'book' => $book,
+            'reviews' => $review,
+            'record' => $book,
             'other_reviews' => $other_reviews,
         ];
 
-        return view('reviews.show',$data);
+        return view('books.show',$data);
     }
 
         public function index(Request $req)
@@ -105,7 +101,8 @@ class ReviewsController extends Controller
         }
 
         //全てのレビューを取得
-        $reviews = Review::where('employee_id', $session_data['employee_id'])
+        $reviews = Review::with('book')
+                        ->where('employee_id', $session_data['employee_id'])
                         ->orderBy('created_at', 'desc') //新しい順へ並び替え
                         ->get();
 

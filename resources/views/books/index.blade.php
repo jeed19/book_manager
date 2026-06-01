@@ -17,10 +17,8 @@
                 <td>{{$record->author_name}}</td>
                 <td>{{$record->cover_image}}</td>
                 <td>
-                        <form action="{{ route('show.submit') }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="isbn" value="{{$record->isbn}}">
-                            <button type="submit" >書籍照会</button>
+                        <a href="{{ route('books.show', ['isbn' => $record->isbn]) }}">
+                            <button type="submit" style="cursor: pointer;">書籍照会</button>
                         </form>
 
                 <td>

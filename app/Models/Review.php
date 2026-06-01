@@ -20,4 +20,14 @@ class Review extends Model
 
     public $incrementing = false; // 自動増分IDを無効化
     protected $primaryKey = 'review_id';
+
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class, 'employee_id', 'employee_id');
+    }
+    public function book()
+    {
+        return $this->belongsTo(Book::class, 'isbn', 'isbn'); 
+    }
+
 }
