@@ -70,14 +70,30 @@
                     <input type="text" name='title' class="title-input" placeholder="タイトル（５０文字以内）" maxlength="50" value="{{ $reviews ? $reviews->title : '' }}" required>
 
                     <textarea name="comment" class="comment-area" rows="4" placeholder="評価コメントを入力欄に記入してください">{{ $reviews ? $reviews->comment : '' }}</textarea>
-                    
-                    <button type="submit">コメントを編集する</button>
+                    <a href="{{ route('reviews.edit',['isbn' => $record->isbn]) }}" class="btn-edit-link">コメントを編集する</a>
                 </form>
             </section>
 
             <section class="right-bottom">
                 <h4>他のユーザーの評価・コメント</h4>
-                @yield('other_comment_content')
+                @if(isset($other_reviews) && count($other_reviews) > 0)
+                    @foreach($other_reviews as $other)
+                        <div class="other-reviewsitem">
+                            <div class="other-reviewsname">
+                                投稿者: {{ $other->employee->display_name ?? 'ニックネーム:' . ($other->employee_name ?? '匿名') }}
+                            </div>
+                            <div class="other-reviewsstars">
+                                {{ str_repeat('★',$other->recommended_level) }}{{ str_repeat('☆', 5 - $other->recommended_level) }}
+                            </div>
+                            <div class="other-reviewstitle">{{ $other->title }}</div>
+                            <div class="other-reviewscomment">
+                                {!! nl2br(e($other->comment)) !!}
+                            </div>
+                        </div>
+                    @endforeach
+                @else
+                    <p>まだ他のユーザーのレビューはありません。</p>
+                @endif
             </section>
             
         </div>

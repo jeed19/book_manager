@@ -26,7 +26,7 @@
             <textarea name="comment" rows="5" cols="40" required>{{ $review ? $review->comment : '' }}</textarea>
         </div>
         <br>
-        <button type="submit">この内容で登録する！</button>
+        <button type="submit">この内容で再登録する</button>
     </form>
     @if ($errors->any())
     <div style="color: red; border: 1px solid red; padding: 10px; margin-bottom: 20px;">
