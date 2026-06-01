@@ -93,6 +93,37 @@ class ReviewsController extends Controller
         return view('books.show',$data);
     }
 
+        public function showReviewsDetail(Request $req, $isbn)
+    {
+        $session_data = $req->session()->get('session_data');
+        if(!$session_data){
+            return redirect('/');
+        }
+
+        // 指定されたIDのレビュー（自分のレビュー）を取得
+        $review = Review::where('isbn', $isbn)
+                        ->where('employee_id', $session_data['employee_id'])
+                        ->first();
+
+        // 書籍情報を取得
+        $book = Book::where('isbn', $isbn)->first();
+
+        // 他のユーザーのレビューを取得
+        $other_reviews = Review::with('employee')
+                            ->where('isbn', $isbn)
+                            ->orderBy('created_at','desc')
+                            ->get();
+
+        $data = [
+            'session_data'  => $session_data,
+            'review'        => $review,
+            'book'          => $book,
+            'other_reviews' => $other_reviews,
+        ];
+
+        return view('reviews.show', $data);
+    }
+
         public function index(Request $req)
     {
         $session_data = $req->session()->get('session_data');
@@ -179,6 +210,7 @@ class ReviewsController extends Controller
             ->with('success', 'レビューを更新しました');
 
     }
+
 
     //感想コメント削除実行
     public function delete(Request $req, $isbn)

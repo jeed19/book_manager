@@ -10,7 +10,6 @@
     @stack('page_styles')
 </head>
 <body>
-    {{-- インラインスタイル(style="...")を外し、クラス名を付与 --}}
     <header class="site-header">
         <h1 class="header-title">
             <a href="{{ route('books.index') }}">書籍管理システム</a>
