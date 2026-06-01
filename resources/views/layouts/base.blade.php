@@ -17,6 +17,8 @@
         
         <nav class="header-nav">
             <ul class="menu-list">
+                <p>ようこそ、{{$session_data['display_name']}} さん！</p>
+
                 @if(session('session_data')['can_register_book'])
                     <li><a href="/books/create" class="create-book-link">書籍作成</a></li>
                 @endif
@@ -27,7 +29,6 @@
                     <li><a href="/employees/index" class="admin-link">【管理者用】アカウントロック解除画面</a></li>
                 @endif
                 
-                {{-- リンク化したログアウト --}}
                 <li>
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                         @csrf
