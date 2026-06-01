@@ -36,15 +36,11 @@ Route::get('/employees/index', [EmployeesController::class, 'index']);
 Route::post('/employees/unlock', [EmployeesController::class, 'unlock']);
 
 // レビュー画面
-Route::get('books/{isbn}/show', [BooksController::class, 'show'])->name('books.show');
-Route::get('/books/{isbn}/reviews/edit',[ReviewsController::class,'edit'])->name('reviews.edit');
-Route::post('/books/{isbn}/reviews',[ReviewsController::class,'store'])->name('reviews.store');
-Route::get('reviews/{id}/erase',[ReviewsController::class,'delete'])->name('reviews.erase');
-Route::get('books/{isbn}/reviews/show', [ReviewsController::class, 'show'])->name('reviews.show');
-Route::post('books/{isbn}/reviews/delete', [ReviewsController::class, 'delete'])->name('reviews.delete');
-Route::get('/my-reviews', [ReviewsController::class, 'index'])->name('reviews.index');
+Route::get('/book_manager/books/show/{isbn}', [App\Http\Controllers\ReviewsController::class, 'show'])->name('books.show');
 Route::post('/reviews/store/{isbn}', [App\Http\Controllers\ReviewsController::class, 'store'])->name('reviews.store');
-
+Route::get('/books/{isbn}/reviews/edit', [App\Http\Controllers\ReviewsController::class, 'edit'])->name('reviews.edit');
+Route::get('/my-reviews', [App\Http\Controllers\ReviewsController::class, 'index'])->name('reviews.index');
+Route::post('/books/{isbn}/reviews/delete', [App\Http\Controllers\ReviewsController::class, 'delete'])->name('reviews.delete');
 
 // ログアウト
 Route::post('/logout', [EmployeesController::class, 'logout'])->name('logout');
