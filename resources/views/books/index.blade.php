@@ -1,11 +1,5 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ラクーン社所有 書籍一覧</title>
-</head>
-<body>
+@extends('layouts.base')
+@section('main')
     <p>ようこそ、{{$session_data['display_name']}} さん！</p>
 
     <table>
@@ -28,8 +22,6 @@
         </tr>  
     </table>
 
-    
-
     <br>
     <ul>
         @if(session('session_data')['can_register_book'])
@@ -37,9 +29,8 @@
         @endif
         <li><a href="/employees/edit">ユーザ表示名・パスワード変更</a></li>
     
-    @if(session('session_data')['can_unlock'])
-    <li><a href="/employees/index" style="color: blue; font-weight: bold;">【管理者用】アカウントロック解除画面</a></li>
-    @endif
-</ul>
-</body>
-</html>
+        @if(session('session_data')['can_unlock'])
+        <li><a href="/employees/index" style="color: blue; font-weight: bold;">【管理者用】アカウントロック解除画面</a></li>
+        @endif
+    </ul>
+@endsection

@@ -1,19 +1,7 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>書籍照会画面</title>
+@extends('layouts.base')
+@push('page_styles')
     <style>
-        /* 新しいヘッダー用のスタイル（左右にボタンを配置） */
-        .header-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-            background-color: #f8f9fa;
-            border-bottom: 1px solid #ccc;
-            margin-bottom: 10px;
-        }
+
         /* ボタンの簡易スタイル（お好みで調整してください） */
         .btn-delete { background-color: #dc3545; color: white; border: none; padding: 6px 12px; cursor: pointer; border-radius: 4px; }
         .btn-submit { background-color: #28a745; color: white; border: none; padding: 6px 12px; cursor: pointer; border-radius: 4px; }
@@ -32,24 +20,26 @@
         
         .comment-area { width: 100%; margin: 10px 0; padding: 8px; box-sizing: border-box; }
     </style>
-</head>
-<body>
+@endpush
 
-    <header class="header-actions">
-        <form action="{{ route('delete.submit') }}" method="POST" onsubmit="return confirm('本当にこの書籍を削除しますか？');">
-            <input type="hidden" name="isbn" value="{{$record->isbn}}">
-            @csrf
-            @method('DELETE')
-            <button type="submit" class="btn-delete">書籍削除</button>
-        </form>
-
-        <button type="submit" form="comment-form" class="btn-submit">投稿</button>
-    </header>
+@section('main')
 
     <main class="screen-layout">
         
         <section class="left-side">
-            @yield('book_info_content') 
+            <!-- @yield('book_info_content')  -->
+            <!-- 共通パーツの呼び出し。データを属性として渡す -->
+            <x-book-card title="{{$record->book_name}}" 
+                        author="{{$record->author_name}}" 
+                        image-url="{{$record->cover_image}}" 
+            />
+
+            <form action="{{ route('delete.submit') }}" method="POST" onsubmit="return confirm('本当にこの書籍を削除しますか？');">
+                <input type="hidden" name="isbn" value="{{$record->isbn}}">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn-delete">書籍削除</button>
+            </form>
         </section>
 
         <div class="right-side">
@@ -65,12 +55,25 @@
                         <input type="radio" id="star3" name="recommended_level" value="3" {{ ($reviews && $reviews->recommended_level == 3) ? 'checked' : ''}}><label for="star3">★</label>
                         <input type="radio" id="star2" name="recommended_level" value="2" {{ ($reviews && $reviews->recommended_level == 2) ? 'checked' : ''}}><label for="star2">★</label>
                         <input type="radio" id="star1" name="recommended_level" value="1" {{ ($reviews && $reviews->recommended_level == 1) ? 'checked' : ''}}><label for="star1">★</label>
+
+                        <input type="radio" id="star0" name="recommended_level" value="0" {{ ($reviews && $reviews->recommended_level == 0) || !$reviews ? 'checked' : ''}}>
+                        <label for="star0" style="font-size: 14px; color: #999; margin-left: 15px; padding-top: 5px;">評価なし:</lavel>
                     </div>
 
                     <input type="text" name='title' class="title-input" placeholder="タイトル（５０文字以内）" maxlength="50" value="{{ $reviews ? $reviews->title : '' }}" required>
 
                     <textarea name="comment" class="comment-area" rows="4" placeholder="評価コメントを入力欄に記入してください">{{ $reviews ? $reviews->comment : '' }}</textarea>
-                    <a href="{{ route('reviews.edit',['isbn' => $record->isbn]) }}" class="btn-edit-link">コメントを編集する</a>
+                    
+                    <div style="text-align: right; margin-top: 10px;">
+                        @if($reviews)
+                            <a href="{{ route('reviews.edit', ['isbn' => $record->isbn]) }}" class="btn-submit" style="display: inline-block; text-align: center; text-decoration: none; box-sizing: border-box; background-color: #007bff;">
+                                編集画面へ移動する
+                            </a>
+                        @else
+                            <button type="submit" class="btn-submit" onclick="return confirm('この内容で投稿してもよろしいですか？');">
+                                投稿する
+                            </button>
+                        @endif
                 </form>
             </section>
 
@@ -109,7 +112,4 @@
             
         </div>
     </main>
-
-    <!-- {{ dd($record->isbn) }} -->
-</body>
-</html>
+@endsection
