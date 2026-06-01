@@ -19,6 +19,21 @@
         .star-rating input:checked ~ label, .star-rating label:hover, .star-rating label:hover ~ label { color: #ffcc00; }
         
         .comment-area { width: 100%; margin: 10px 0; padding: 8px; box-sizing: border-box; }
+
+        .btn-link {
+            display: inline-block;
+            background-color: #17a2b8;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .btn-link:hover {
+            background-color: #138496;
+        }
     </style>
 @endpush
 
@@ -108,8 +123,13 @@
                 @else
                     <p>まだ他のユーザーのレビューはありません。</p>
                 @endif
+
+                <div style="text-align: right; margin-top: 20px; border-top: 1px dashed #ccc; padding-top: 15px;">
+                    <a href="{{ route('reviews.show', ['isbn' => $record->isbn]) }}" class="btn-link">
+                        全てのレビュー詳細画面へ
+                    </a>
+                </div>
             </section>
-            
         </div>
     </main>
 @endsection
