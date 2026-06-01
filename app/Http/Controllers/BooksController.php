@@ -118,11 +118,10 @@ class BooksController extends Controller
         $book->isbn = (int)$summary['isbn'];
         $book->book_name = $summary['title'] ?? 'タイトル不明';
         $book->author_name = $summary['author'] ?? '著者不明';
-        $book->cover_image = $summary['cover'] ?? 'https://placehold.jp/150x200.png';
+        $book->cover_image = $summary['cover'] ;
 
         // booksテーブルにデータを保存するメソッドの実行
         $book->save();
-        // dd($book->book_name);
         // 登録したデータを照会画面に渡し、表示する
         $data =[
             'session_data' => $req->session()->get('session_data',0),
