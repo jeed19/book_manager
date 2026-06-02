@@ -10,7 +10,7 @@
             </ul>
         @endif
         <div class="form-container">
-            <form action="/Employees/update" method="post">
+            <form action="/employees/update" method="post">
                 @csrf
                 <h2>ユーザ情報の更新</h2>
                 <input type="hidden" name="employee_id" value="{{ $record->employee_id }}">
@@ -21,8 +21,9 @@
                 </p>
 
                 <p>
-                    現在のパスワード：<br>
-                    <input type="password" name="current_password" required>
+                    <br>
+                    現在のパスワード（パスワードを変更する場合のみ入力）：<br>
+                    <input type="password" name="current_password">
                 </p>
 
                 <p>
