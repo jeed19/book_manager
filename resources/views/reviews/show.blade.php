@@ -167,8 +167,9 @@
             <p style="color: #666; background-color: #fff; padding: 20px; border-radius: 4px; text-align: center;">他のユーザーのレビューはまだありません。</p>
         @endif
         
-        <div style="margin-top: 40px; text-align: center;">
-            <a href="{{ route('reviews.index') }}" class="btn btn-secondary">一覧に戻る</a>
+        <div style="display: flex; justify-content: center; gap: 20px; margin-top: 40px;">
+            <a href="{{ route('books.index') }}" class="btn btn-secondary" style="background-color: #34495e;">書籍一覧に戻る</a>
+            <a href="{{ route('reviews.index') }}" class="btn btn-secondary">マイレビュー一覧に戻る</a>
         </div>
     </div>
 </body>
