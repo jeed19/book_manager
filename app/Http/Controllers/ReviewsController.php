@@ -26,12 +26,12 @@ class ReviewsController extends Controller
         $data = [
             'session_data' => $session_data,
             'book' => $book,
-            'review' => null, //新規作成時は既存データが存在しないのでnull
+            'review' => null, 
         ];
 
         return view('reviews.create',$data);
     }
-    // レビューの保存、既存データあれば更新、なければ新規作成
+
     public function store(Request $req, $isbn)
     {
         $session_data = $req->session()->get('session_data');
@@ -39,7 +39,7 @@ class ReviewsController extends Controller
             return redirect('/');
         }
 
-        // バリデーション
+
         $req->validate([
             'recommended_level' => 'required|integer|between:0,5',
             'title' => 'required|string|max:50',
@@ -47,12 +47,12 @@ class ReviewsController extends Controller
         ]);
 
         Review::updateOrCreate(
-            //検索条件で社員が書籍に対して書いたレビューが存在するか
+
             [
                 'employee_id' => $session_data['employee_id'],
                 'isbn' => $isbn,
             ],
-            // 更新するデータ
+
             [
                 'recommended_level' => $req->recommended_level,
                 'title' => $req->title,
@@ -63,7 +63,7 @@ class ReviewsController extends Controller
                 ->with('success', '投稿しました');
 
     }
-    //レビュー画面の単体表示
+
     public function show(Request $req, $isbn)
     {
         $session_data = $req->session()->get('session_data');
@@ -71,18 +71,38 @@ class ReviewsController extends Controller
             return redirect('/');
         }
 
-        //指定されたIDのレビューを取得
         $review = Review::where('isbn', $isbn)
                         ->where('employee_id', $session_data['employee_id'])
                         ->first();
 
-        //そのレビューが紐づく書籍情報を取得
         $book = Book::where('isbn', $isbn)->first();
+        
+        $sort = $req->input('sort', 'new');
+        $limit = $req->input('limit', '3');
 
-        $other_reviews = Review::with('employee')
-                                ->where('isbn', $isbn)
-                                ->orderBy('created_at','desc')
-                                ->get();
+        $query = Review::with('employee')->where('isbn', $isbn);
+
+        if ($sort === 'old') {
+            $query->orderBy('created_at', 'asc'); 
+        } elseif ($sort === 'rating_high') {
+            $query->orderBy('recommended_level', 'desc')->orderBy('created_at', 'desc'); 
+        } elseif ($sort === 'rating_low') {
+            $query->orderBy('recommended_level', 'asc')->orderBy('created_at', 'desc'); 
+        } else {
+            $query->orderBy('created_at', 'desc'); 
+        }
+
+        if ($limit === 'all') {
+            $total_count = clone $query;
+            $count = $total_count->count();
+            $perPage = $count > 0 ? $count : 1;
+            $other_reviews = $query->paginate($perPage);
+        } else {
+            $other_reviews = $query->paginate((int)$limit);
+        }
+
+        $other_reviews->appends($req->all());
+
         $data = [
             'session_data' => $session_data,
             'reviews' => $review,
@@ -100,15 +120,12 @@ class ReviewsController extends Controller
             return redirect('/');
         }
 
-        // 指定されたIDのレビュー（自分のレビュー）を取得
         $review = Review::where('isbn', $isbn)
                         ->where('employee_id', $session_data['employee_id'])
                         ->first();
 
-        // 書籍情報を取得
         $book = Book::where('isbn', $isbn)->first();
 
-        // 他のユーザーのレビューを取得
         $other_reviews = Review::with('employee')
                             ->where('isbn', $isbn)
                             ->orderBy('created_at','desc')
@@ -131,10 +148,9 @@ class ReviewsController extends Controller
             return redirect('/');
         }
 
-        //全てのレビューを取得
         $reviews = Review::with('book')
                         ->where('employee_id', $session_data['employee_id'])
-                        ->orderBy('created_at', 'desc') //新しい順へ並び替え
+                        ->orderBy('created_at', 'desc')
                         ->get();
 
         $data = [
@@ -145,7 +161,7 @@ class ReviewsController extends Controller
         return view('reviews.index',$data);
 
     }
-    //レビュー編集画面の表示
+
     public function edit(Request $req,$isbn)
     {
         $session_data = $req->session()->get('session_data');
@@ -153,29 +169,23 @@ class ReviewsController extends Controller
             return redirect('/');
         }
 
-        //編集するレビューを取得
+
         $review = Review::where('isbn', $isbn)
                         ->where('employee_id', $session_data['employee_id'])
                         ->first();
 
-        //他人のレビューを編集しようとしていないかチェック
-        /*if(!$review || $review->employee_id != $session_data['employee_id']){
-            return redirect()->back()->withErrors(['error' => '権限がありません']);
-        }*/
 
-        //書籍情報を取得
         $book = Book::where('isbn', $isbn)->first();
 
         $data = [
             'session_data' => $session_data,
             'book' => $book,
-            'review' => $review, //フォームに初期値を入れる為渡す
+            'review' => $review,
         ];
 
         return view('reviews.edit',$data);
     }
-    //レビュー更新処理
-    //edit画面で直した内容を、実際にデータベースへ上書き保存する。
+
     public function update(Request $req, $isbn)
     {
         $session_data = $req->session()->get('session_data');
@@ -183,12 +193,10 @@ class ReviewsController extends Controller
             return redirect('/');
         }
 
-        //更新対象のレビューを取得
         $review = Review::where('isbn', $isbn)
                         ->where('employee_id', $session_data['employee_id'])
                         ->first();
 
-        //他人のレビューを更新していないかチェック
         if(!$review || $review->employee_id != $session_data['employee_id']){
             return redirect()->back()->withErrors(['error' => '権限がありません']);
         }
@@ -199,20 +207,19 @@ class ReviewsController extends Controller
             'comment' => 'required|string',
         ]);
 
-        //データの上書き保存
+
         $review->recommended_level = $req->recommended_level;
         $review->title = $req->title;
         $review->comment = $req->comment;
         $review->save();
 
-        //更新後、書籍の詳細画面へ戻す
+
         return redirect()->route('reviews.show', ['isbn' => $review->isbn])
             ->with('success', 'レビューを更新しました');
 
     }
 
 
-    //感想コメント削除実行
     public function delete(Request $req, $isbn)
     {
         $session_data = $req->session()->get('session_data');
@@ -224,9 +231,9 @@ class ReviewsController extends Controller
                         ->where('employee_id', $session_data['employee_id'])
                         ->first();
 
-        //他人のレビューを削除しようとしていないか確認する為のコード
+
         if($review && $review->employee_id == $session_data['employee_id']){
-            $isbn = $review->isbn;  //リダイレクト用にisbnを控えておく
+            $isbn = $review->isbn;  
             $review->delete();
             return redirect()->route('books.show', ['isbn' => $isbn]);
         }

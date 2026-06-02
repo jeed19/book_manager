@@ -62,6 +62,26 @@
         <div class="right-side">
             <section class="right-bottom" style="height: 100%;">
                 <h4>他のユーザーの評価・コメント</h4>
+
+                <form action="{{ route('books.show', ['isbn' => $record->isbn]) }}" method="GET" style="margin-bottom: 15px; display: flex; gap: 10px; align-items: center; justify-content: flex-end;">
+                    
+                    <span style="font-size: 14px; color: #666;">並び替え:</span>
+                    <select name="sort" onchange="this.form.submit()" style="padding: 5px; border-radius: 4px; border: 1px solid #ccc;">
+                        <option value="new" {{ request('sort', 'new') == 'new' ? 'selected' : '' }}>新しい順</option>
+                        <option value="old" {{ request('sort') == 'old' ? 'selected' : '' }}>古い順</option>
+                        <option value="rating_high" {{ request('sort') == 'rating_high' ? 'selected' : '' }}>おすすめ度が高い順</option>
+                        <option value="rating_low" {{ request('sort') == 'rating_low' ? 'selected' : '' }}>おすすめ度が低い順</option>
+                    </select>
+                    
+                    <span style="font-size: 14px; color: #666; margin-left: 10px;">表示件数:</span>
+                    <select name="limit" onchange="this.form.submit()" style="padding: 5px; border-radius: 4px; border: 1px solid #ccc;">
+                        <option value="3" {{ request('limit', '3') == '3' ? 'selected' : '' }}>3件まで</option>
+                        <option value="5" {{ request('limit') == '5' ? 'selected' : '' }}>5件まで</option>
+                        <option value="all" {{ request('limit') == 'all' ? 'selected' : '' }}>すべて</option>
+                    </select>
+
+                </form>
+
                 @if(isset($other_reviews) && count($other_reviews) > 0)
                     @foreach($other_reviews as $other)
                         <div class="other-review-card">
