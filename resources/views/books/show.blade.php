@@ -65,28 +65,23 @@
                 <h4>他のユーザーの評価・コメント</h4>
                 @if(isset($other_reviews) && count($other_reviews) > 0)
                     @foreach($other_reviews as $other)
-                        <div class="other-reviewsitem">
+                        <div class="other-review-card">
+                            <p style="margin-top: 0;"><span class="label-text">タイトル:</span> <strong style="font-size: 1.1em;">{{ $other->title }}</strong></p>
                             
-                            <div class="other-reviewstitle" style="font-size: 1.2em; border-bottom: 1px solid #eee; padding-bottom: 5px;">
-                                {{ $other->title }}
-                            </div>
+                            <p><span class="label-text">おすすめ度:</span> 
+                                <span class="star-display">
+                                    {{ str_repeat('★', $other->recommended_level) }}{{ str_repeat('☆', 5 - $other->recommended_level) }}
+                                </span>
+                            </p>
                             
-                            <div class="other-reviewsstars" style="margin-top: 5px;">
-                                {{ str_repeat('★',$other->recommended_level) }}{{ str_repeat('☆', 5 - $other->recommended_level) }}
-                            </div>
-                            
-                            <div class="other-reviewscomment" style="margin-top: 10px;">
+                            <div class="comment-box" style="margin-bottom: 15px;">
                                 {!! nl2br(e($other->comment)) !!}
                             </div>
-                            
-                            <div class="other-reviewsname" style="margin-top: 15px; font-size: 0.9em; color: #555;">
-                                投稿者: {{ $other->employee->display_name ?? 'ニックネーム:' . ($other->employee_name ?? '匿名') }}
+
+                            <div style="display: flex; justify-content: flex-end; gap: 20px; font-size: 0.9em; border-top: 1px solid #eee; padding-top: 10px;">
+                                <span><span class="label-text">投稿者:</span> <strong>{{ $other->employee->display_name ?? 'ニックネーム:' . ($other->employee_name ?? '匿名') }}</strong></span>
+                                <span><span class="label-text">投稿日:</span> <strong>{{ $other->updated_at ? $other->updated_at->format('Y/m/d H:i') . ' 編集' : $other->created_at->format('Y/m/d H:i') . ' 投稿' }}</strong></span>
                             </div>
-                            
-                            <div class="other-reviewsdate" style="font-size: 0.8em; color: #999; text-align: right;">
-                                {{ $other->updated_at ? $other->updated_at->format('Y/m/d H:i') . ' 編集' : $other->created_at->format('Y/m/d H:i') . ' 投稿' }}
-                            </div>
-                            
                         </div>
                     @endforeach
                 @else
