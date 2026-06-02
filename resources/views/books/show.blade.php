@@ -24,11 +24,7 @@
                 @method('DELETE')
                 <button type="submit" class="btn-delete">書籍削除</button>
             </form>
-        </section>
-
-        <div class="right-side">
-            
-            <section class="right-top">
+        <div style="border-top: 2px dashed #ccc; padding-top: 20px;">
                 <h4>あなたの評価とコメント</h4>
                 <form action="{{ route('reviews.store', ['isbn' => $record->isbn]) }}" method="POST" id="comment-form">
                     @csrf
@@ -44,7 +40,7 @@
                         <label for="star0" style="font-size: 14px; color: #999; margin-left: 15px; padding-top: 5px;">評価なし:</lavel>
                     </div>
 
-                    <input type="text" name='title' class="title-input" placeholder="タイトル（５０文字以内）" maxlength="50" value="{{ $reviews ? $reviews->title : '' }}" required>
+                    <input type="text" name='title' class="title-input" placeholder="タイトル（５０文字以内）" maxlength="50" value="{{ $reviews ? $reviews->title : '' }}" required style="width: 100%; margin-bottom: 10px; padding: 8px; box-sizing: border-box;">
 
                     <textarea name="comment" class="comment-area" rows="4" placeholder="評価コメントを入力欄に記入してください">{{ $reviews ? $reviews->comment : '' }}</textarea>
                     
@@ -58,10 +54,13 @@
                                 投稿する
                             </button>
                         @endif
+                    </div>
                 </form>
-            </section>
+            </div>
+        </section>
 
-            <section class="right-bottom">
+        <div class="right-side">
+            <section class="right-bottom" style="height: 100%;">
                 <h4>他のユーザーの評価・コメント</h4>
                 @if(isset($other_reviews) && count($other_reviews) > 0)
                     @foreach($other_reviews as $other)
