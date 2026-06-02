@@ -99,7 +99,7 @@
 
                             <div style="display: flex; justify-content: flex-end; gap: 20px; font-size: 0.9em; border-top: 1px solid #eee; padding-top: 10px;">
                                 <span><span class="label-text">投稿者:</span> <strong>{{ $other->employee->display_name ?? 'ニックネーム:' . ($other->employee_name ?? '匿名') }}</strong></span>
-                                <span><span class="label-text">投稿日:</span> <strong>{{ $other->updated_at ? $other->updated_at->format('Y/m/d H:i') . ' 編集' : $other->created_at->format('Y/m/d H:i') . ' 投稿' }}</strong></span>
+                                <span><span class="label-text">投稿日:</span> <strong>{{ $other->updated_at ? $other->updated_at->format('Y/m/d H:i') : $other->created_at->format('Y/m/d H:i') . ' 投稿' }}</strong></span>
                             </div>
 
                             @php

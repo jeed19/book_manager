@@ -134,8 +134,12 @@
             書籍: {{ $book->book_name ?? 'タイトル不明' }} <br>ISBN: {{ $book->isbn }}
         </div>
 
-        <form action="{{ route('reviews.store', ['isbn' => $book->isbn]) }}" method="POST" onsubmit="return confirm('{{ $review ? 'この内容で更新してもよろしいですか？' : 'この内容で投稿してもよろしいですか？' }}');">
+        <form action="{{ $review ? route('reviews.update', ['isbn' => $book->isbn]) : route('reviews.store', ['isbn' => $book->isbn]) }}" method="POST" onsubmit="return confirm('{{ $review ? 'この内容で更新してもよろしいですか？' : 'この内容で投稿してもよろしいですか？' }}');">
             @csrf
+
+            @if($review)
+                <input type="hidden" name="target_employee" value="{{ $review->employee_id }}">
+            @endif
 
             <div class="form-group">
                 <label>おすすめ度 (0〜5):</label>
@@ -161,6 +165,9 @@
             <form action="{{ route('reviews.delete', ['isbn' => $book->isbn]) }}" method="POST" onsubmit="return confirm('本当にこのレビューを削除しますか？消したデータは元に戻せません。');">
                 @csrf
                 @method('DELETE')
+                
+                <input type="hidden" name="target_employee" value="{{ $review->employee_id }}">
+
                 <button type="submit" class="btn-delete">このレビューを削除する</button>
             </form>
         @endif
