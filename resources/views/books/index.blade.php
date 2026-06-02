@@ -43,11 +43,11 @@
             <div class="book-author">{{ $record->author_name }}</div>
 
             {{-- 2. 詳細ボタンも同じく 正しいルートのリンク（aタグ）に変更 --}}
-            <div class="detail-action">
+            <!-- <div class="detail-action">
                 <a href="{{ route('books.show', ['isbn' => $record->isbn]) }}" class="btn-show-link">
                     <button type="button" class="btn-show">詳細</button>
                 </a>
-            </div>
+            </div> -->
 
         </div>
         @endforeach
