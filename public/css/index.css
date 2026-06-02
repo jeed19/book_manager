@@ -1,65 +1,119 @@
-        /* 画面全体を中央揃えにするための設定 */
-        body {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center; /* 左右の中央揃え */
-            min-height: 100vh;
-            font-family: sans-serif;
-        }
+/* 画面全体を中央揃えにするための設定 */
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 左右の中央揃え */
+    min-height: 100vh;
+    font-family: sans-serif;
+    background-color: #f4f6f8; /* 画面全体の背景：少し青み・温かみのある落ち着いた薄グレー */
+}
 
-        /* 会社名（タイトル）のスタイル */
-        .company-title {
-            font-size: 32px;       /* 文字を大きく */
-            font-weight: bold;     /* 太字に */
-            margin-top: 80px;      /* 上からの位置調整 */
-            margin-bottom: 20px;   /* フォームとの間隔 */
-            color: #333;
-        }
+/* 会社名（タイトル）のスタイル */
+.company-title {
+    font-size: 28px;       /* 少しだけ小ぶりにして上品に */
+    font-weight: bold;     /* 太字に */
+    margin-top: 100px;     /* 上からの位置調整 */
+    margin-bottom: 30px;   /* フォームとの間隔 */
+    color: #333;
+    text-align: center;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.05); /* ほんの少しだけ影を入れて質感を向上 */
+}
 
-        /* フォーム全体のコンテナ */
-        .form-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;   /* 中身（子要素）を中央に揃える */
-            gap: 12px;             /* 入力欄やボタンのすき間 */
-            width: 300px;          /* 横幅を固定して中央にまとめる */
-        }
+/* フォームとエラーメッセージを包むラッパー */
+.login-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 280px;          /* 【修正】横幅を360pxから「280px」に縮小してコンパクトに */
+}
 
-        /* ラベルのスタイル */
-        .form-container label {
-            font-size: 14px;
-            color: #555;
-            align-self: center;    /* ラベル文字も中央揃え */
-        }
+/* フォーム全体のコンテナ（落ち着いた色のカード風） */
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;   
+    gap: 12px;             
+    /* width: 100%; */
+    background-color: #ffffff; 
+    padding: 35px 25px;        /* 【微調整】横幅に合わせて左右の余白を少しスリムに */
+    border-radius: 8px;        
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); 
+    border: 1px solid #e2e8f0; 
+    box-sizing: border-box;
+}
 
-        /* 入力欄のスタイル */
-        .form-container input[type="text"], 
-        .form-container input[type="password"] {
-            width: 100%;           /* コンテナの幅（300px）いっぱいに広げる */
-            padding: 10px;         /* 内側の余白を少し広げて押しやすく */
-            box-sizing: border-box;/* 幅の計算を狂わせない設定 */
-            border: 1px solid #ccc;
-            border-radius: 4px;    /* 角を少し丸く */
-            text-align: center;    /* 入力する文字も中央揃えにする場合（不要なら消してください） */
-        }
+/* ラベルのスタイル */
+.form-container label {
+    font-size: 14px;
+    color: #4a5568;        /* 少し落ち着いたグレーネイビー */
+    font-weight: bold;     /* ラベルを太字にして認識しやすく */
+    align-self: flex-start;/* 【変更】文字の並びを中央から左寄せにして、綺麗なビジネス文書風に */
+    margin-bottom: -4px;   /* 入力欄との距離を微調整 */
+}
 
-        /* ログインボタンのスタイル */
-        .form-container input[type="submit"] {
-            width: 100%;           /* ボタンも入力欄と同じ幅に揃える */
-            padding: 12px;
-            background-color: #333;/* ボタンの色（黒〜濃いグレー） */
-            color: #fff;           /* 文字を白に */
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;       /* マウスを乗せたときに指マークにする */
-            font-size: 16px;
-            font-weight: bold;
-            margin-top: 10px;
-        }
+/* 入力欄のスタイル */
+.form-container input[type="text"], 
+.form-container input[type="password"] {
+    width: 100%;           /* コンテナの幅いっぱいに広げる */
+    padding: 12px;         /* 高さを少し出して押しやすく */
+    box-sizing: border-box;/* 幅の計算を狂わせない設定 */
+    border: 1px solid #cbd5e1; /* 落ち着いた色の枠線 */
+    border-radius: 6px;    /* 入力欄の角も少し丸める */
+    text-align: left;      /* 【変更】文字入力は中央より左寄せの方が自然で落ち着きます */
+    font-size: 15px;
+    background-color: #f8fafc; /* 入力欄自体もほんのりグレーにして落ち着きを出す */
+    transition: all 0.2s ease;
+}
 
-        /* ボタンにマウスを乗せたときの反応 */
-        .form-container input[type="submit"]:hover {
-            background-color: #555;
-        }
+/* 入力欄にカーソルが当たったとき（フォーカス時） */
+.form-container input[type="text"]:focus, 
+.form-container input[type="password"]:focus {
+    background-color: #ffffff;
+    border-color: #4a5568; /* フォーカスされたら少し濃い色にする */
+    outline: none;
+}
+
+/* ログインボタンのスタイル */
+.form-container input[type="submit"] {
+    width: 100%;           /* ボタンも入力欄と同じ幅に揃える */
+    padding: 14px;
+    background-color: #333333;/* ヘッダーと同じ引き締まった黒〜濃いグレー */
+    color: #fff;           /* 文字を白に */
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;       /* マウスを乗せたときに指マークにする */
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 15px;
+    transition: background-color 0.2s ease;
+}
+
+/* ボタンにマウスを乗せたときの反応 */
+.form-container input[type="submit"]:hover {
+    background-color: #4a5568; /* ヘッダーリンクのホバー色に似た落ち着いた色に変化 */
+}
+
+/* エラーメッセージ専用の赤字スタイル */
+.error-box {
+    width: 100%;
+    margin-top: 15px;      /* フォームとの間に適度なスキマを作る */
+    padding: 12px 15px;
+    background-color: #fff5f5; /* ほんのり薄い赤の背景 */
+    border: 1px solid #fed7d7; /* 薄い赤の枠線 */
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+.error-box ul {
+    margin: 0;
+    padding-left: 20px;    /* リストのぽっち（・）の分の余白 */
+}
+
+.error-box li {
+    color: #c53030;        /* ハッキリとした可読性の高い上品な赤字 */
+    font-size: 14px;
+    font-weight: bold;
+    text-align: left;      /* エラー文は左寄せで読みやすく */
+}

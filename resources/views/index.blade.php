@@ -5,10 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ config('company.name') }} 書籍管理システム</title>
         <link rel="stylesheet" href="{{ asset('css/index.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/books/create.css') }}">
 </head>
 <body>
-    <div class="company-title">{{ config('company.name') }}　書籍管理システム</div>
+    <div class="company-title">{{ config('company.name') }}<br>書籍管理システム</div>
     <form action="/book_manager/login" method="post" class="form-container">
         @csrf
         <label for="employee_id">社員ID</label> 
@@ -17,13 +16,14 @@
         <input type="password" name="password" id="password" minlength="8" maxlength ="32" value="{{ old('password')}}" required placeholder="パスワード" /><br>
         <input type="submit" value="ログイン">
     </form>
-    <br>
-    @if($errors->any())
-        <ul>
-            @foreach($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    @endif
+        @if($errors->any())
+            <div class="error-box">
+                <ul>
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 </body>
 </html>
