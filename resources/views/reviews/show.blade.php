@@ -148,7 +148,14 @@
                         <span><span class="label-text">投稿日:</span> <strong>{{ $other->created_at ? $other->created_at->format('Y/m/d H:i') : '未設定' }}</strong></span>
                     </div>
 
-                    @if(isset($session_data['can_register_book']) && $session_data['can_register_book'])
+                    @php
+                        $has_delete_auth = false;
+                        if(isset($session_data['department_name'])) {
+                            $has_delete_auth = \App\Models\Department::where('department_name', $session_data['department_name'])->value('can_delete_review');
+                        }
+                    @endphp
+
+                    @if($has_delete_auth)
                         <div style="display: flex; gap: 10px; align-items: center; justify-content: flex-end; margin-top: 15px; padding-top: 10px; border-top: 1px dashed #ccc;">
                             <span style="font-size: 12px; color: #e74c3c; font-weight: bold;">※管理者専用:</span>
                             

@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Review;
-use App\Models\Book;    
+use App\Models\Book;
+use App\models\Department;    
 
 class ReviewsController extends Controller
 {
@@ -168,12 +169,25 @@ class ReviewsController extends Controller
         if(!$session_data){
             return redirect('/');
         }
+        
+        $target_employee_id = $session_data['employee_id'];
 
+        $can_delete_review = false;
+        if (isset($session_data['department_name'])) {
+            $can_delete_review = \App\Models\Department::where('department_name', $session_data['department_name'])->value('can_delete_review');
+        }
+
+        if ($req->has('target_employee') && $can_delete_review) {
+            $target_employee_id = $req->input('target_employee');
+        }
 
         $review = Review::where('isbn', $isbn)
-                        ->where('employee_id', $session_data['employee_id'])
+                        ->where('employee_id', $target_employee_id)
                         ->first();
 
+                        if(!$review){
+            return redirect()->back()->withErrors(['error' => 'レビューが存在しないか、権限がありません']);
+        }
 
         $book = Book::where('isbn', $isbn)->first();
 
@@ -193,12 +207,23 @@ class ReviewsController extends Controller
             return redirect('/');
         }
 
+        $target_employee_id = $session_data['employee_id'];
+
+        $can_delete_review = false;
+        if (isset($session_data['department_name'])) {
+            $can_delete_review = \App\Models\Department::where('department_name', $session_data['department_name'])->value('can_delete_review');
+        }
+
+        if ($req->has('target_employee') && $can_delete_review) {
+            $target_employee_id = $req->input('target_employee');
+        }
+
         $review = Review::where('isbn', $isbn)
-                        ->where('employee_id', $session_data['employee_id'])
+                        ->where('employee_id', $target_employee_id)
                         ->first();
 
-        if(!$review || $review->employee_id != $session_data['employee_id']){
-            return redirect()->back()->withErrors(['error' => '権限がありません']);
+        if(!$review){
+            return redirect()->back()->withErrors(['error' => 'レビューが存在しないか、権限がありません']);
         }
 
         $req->validate([
@@ -229,16 +254,21 @@ class ReviewsController extends Controller
 
         $target_employee_id = $session_data['employee_id'];
 
-        if ($req->has('target_employee') && !empty($session_data['can_register_book'])) {
+        $can_delete_review = false;
+        if (isset($session_data['department_name'])) {
+            $can_delete_review = \App\Models\Department::where('department_name', $session_data['department_name'])->value('can_delete_review');
+        }
+
+        if ($req->has('target_employee') && $can_delete_review) {
             $target_employee_id = $req->input('target_employee');
         }
 
         $review = Review::where('isbn', $isbn)
-                        ->where('employee_id', $session_data['employee_id'])
+                        ->where('employee_id', $target_employee_id)
                         ->first();
 
 
-        if($review && $review->employee_id == $session_data['employee_id']){
+        if($review){
             $isbn = $review->isbn;  
             $review->delete();
             return redirect()->route('books.show', ['isbn' => $isbn]);
