@@ -38,7 +38,7 @@
                         <td>{{ $emp->employee_id }}</td>
                         <td>{{ $emp->employee_name }}</td>
                         <td>{{ $emp->display_name }}</td>
-                        <td>{{ $emp->department_id }}</td>
+                        <td>{{ $emp->department->department_name ?? '所属なし' }}</td>
                         <td>
                             @if($emp->locked_at)
                                 <span style="color: red; font-weight: bold; border: 1px solid red; padding: 2px 5px; background-color: white;">ロック中</span>

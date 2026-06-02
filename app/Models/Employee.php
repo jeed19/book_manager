@@ -24,4 +24,10 @@ class Employee extends Model
     protected $casts = [
         'locked_at' => 'datetime',
     ];
+
+    public function department()
+    {
+        // 社員が1つの部署に所属している場合
+        return $this->belongsTo(Department::class, 'department_id', 'department_id');
+    }
 }

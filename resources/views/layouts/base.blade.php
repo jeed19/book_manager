@@ -25,7 +25,7 @@
                 <li><a href="/employees/edit">ユーザ表示名・パスワード変更</a></li>
             
                 @if(session('session_data')['can_unlock'])
-                    <li><a href="/employees/index" class="admin-link">【管理者用】アカウントロック解除画面</a></li>
+                    <li><a href="/employees/index" class="admin-link">社員情報管理</a></li>
                 @endif
                 
                 <li>
