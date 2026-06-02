@@ -35,10 +35,27 @@ class EmployeesController extends Controller
             $validator->after(function ($validator) use ($req) {
                 $employee = Employee::where('employee_id', $req->employee_id)->first();
 
-                // アカウントロック状態の確認
+                // ★【変更】一時アカウントロック状態の確認
                 if ($employee && $employee->locked_at !== null) {
-                    $validator->errors()->add('auth_failed', 'このアカウントはロックされています。管理者に問い合わせてください。');
-                    return;
+                    
+                    // ロックされた日時から30分経過しているか計算
+                    // (現在時刻が locked_at の30分後よりも前＝まだ30分経っていない)
+                    if (now()->before($employee->locked_at->addMinutes(30))) {
+                        
+                        // 残り時間を計算してメッセージに出すと親切です
+                        $remainingMinutes = now()->diffInMinutes($employee->locked_at->addMinutes(30)) + 1;
+                        
+                        $validator->errors()->add(
+                            'auth_failed', 
+                            "社員IDまたはパスワードが違います"
+                        );
+                        return;
+                    } else {
+                        // ★30分以上経過していれば、自動解除とみなしてロック日時とカウンターをリセット
+                        $employee->locked_at = null;
+                        $employee->login_failure_count = 0;
+                        $employee->save();
+                    }
                 }
 
                 // 「社員が存在しない」または「パスワードが一致しない」場合
@@ -48,7 +65,7 @@ class EmployeesController extends Controller
                     if ($employee) {
                         $employee->login_failure_count += 1;
                         if ($employee->login_failure_count >= 3) {
-                            $employee->locked_at = now(); // 3回でロック
+                            $employee->locked_at = now(); // 3回でロック（ここから30分間）
                         }
                         $employee->save();
                     }

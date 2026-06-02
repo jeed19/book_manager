@@ -19,4 +19,9 @@ class Employee extends Model
     const DISPLAY_NAME_MAX = 32;
     const RAW_PASSWORD_MIN = 8;
     const RAW_PASSWORD_MAX = 32;
+    
+    // locked_at カラムを自動的に日付・時刻オブジェクト（Carbon）に変換する
+    protected $casts = [
+        'locked_at' => 'datetime',
+    ];
 }
