@@ -9,18 +9,18 @@
 @section('main')
     <p>ようこそ、{{$session_data['display_name']}} さん！</p>
 
-    <!-- {{-- 並べ替え用UI --}}
+    {{-- 並べ替え用UI --}}
     <div class="sort-container" style="margin-bottom: 20px;">
         <form action="{{ route('books.index') }}" method="GET" id="sort-form">
             <label for="sort_by">並べ替え:</label>
             <select name="sort_by" id="sort_by" onchange="document.getElementById('sort-form').submit();">
                 <option value="created_at_desc" {{ request('sort_by') == 'created_at_desc' ? 'selected' : '' }}>登録日の新しい順</option>
                 <option value="created_at_asc" {{ request('sort_by') == 'created_at_asc' ? 'selected' : '' }}>登録日の古い順</option>
-                <option value="review_count" {{ request('sort_by') == 'review_count' ? 'selected' : '' }}>レビュー数の多い順</option>
-                <option value="review_rating" {{ request('sort_by') == 'review_rating' ? 'selected' : '' }}>レビュー評価の高い順</option>
+                <!-- <option value="review_count" {{ request('sort_by') == 'review_count' ? 'selected' : '' }}>レビュー数の多い順</option>
+                <option value="review_rating" {{ request('sort_by') == 'review_rating' ? 'selected' : '' }}>レビュー評価の高い順</option> -->
             </select>
         </form>
-    </div> -->
+    </div>
 
     <div class="book-grid">
         @foreach($records as $record)

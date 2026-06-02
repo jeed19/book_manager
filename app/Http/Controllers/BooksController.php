@@ -15,12 +15,33 @@ class BooksController extends Controller
 {
     public function index(Request $req){
         
+        // 1. クエリビルダの初期化（シンプルに全件取得の準備）
+        $query = Book::query();
+
+        // 2. リクエストから並べ替え条件を取得（デフォルトは新着順：created_at_desc）
+        $sortBy = $req->input('sort_by', 'created_at_desc');
+
+        // 3. 条件分岐による並べ替えの制御
+        switch ($sortBy) {
+            case 'created_at_asc':
+                // 登録日の古い順
+                $query->orderBy('created_at', 'asc');
+                break;
+
+            case 'created_at_desc':
+            default:
+                // 登録日の新しい順（新着順）
+                $query->orderBy('created_at', 'desc');
+                break;
+        }
+
+        // 4. 条件を適用してデータを取得
         $data = [
-            'session_data' => $req->session()->get('session_data',0),
-            'records' => Book::all()
+            'session_data' => $req->session()->get('session_data', 0),
+            'records' => $query->get()
         ];
 
-        return view('Books.index',$data);
+        return view('Books.index', $data);
     }
 
     public function create(Request $req){
@@ -124,7 +145,7 @@ class BooksController extends Controller
         }
         
         // DBの各項目へデータを入れる
-        
+
         $book->isbn = (int)$summary['isbn'];
         
         // タイトル
