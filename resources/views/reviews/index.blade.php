@@ -42,13 +42,14 @@
             background-color: #7f8c8d;
         }
 
-        /* レビュー1つ1つを「カード」のように見せる魔法 */
+        /* ★ 他の画面と統一したレビューカードの装飾 */
         .review-card {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            padding: 20px;
-            margin-bottom: 20px;
+            background: #ffffff;
+            border-left: 5px solid #ffcc00;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             transition: transform 0.2s;
         }
         .review-card:hover {
@@ -71,17 +72,19 @@
             margin-bottom: 10px;
         }
 
-        .rating-stars {
-            color: #f39c12;
-            font-size: 20px;
-            margin-bottom: 10px;
+        /* 項目名のラベル文字 */
+        .label-text {
+            font-size: 0.9em;
+            color: #666;
+            margin-right: 10px;
         }
 
+        /* ★ 他の画面と統一したコメントボックスの装飾 */
         .comment-box {
-            background-color: #f9f9f9;
-            padding: 15px;
+            background-color: #f9f9f9; 
+            padding: 15px; 
             border-radius: 4px;
-            border-left: 4px solid #3498db;
+            margin-top: 5px;
             margin-bottom: 15px;
             font-size: 15px;
             line-height: 1.6;
@@ -119,16 +122,26 @@
                         対象のISBN: {{ $r->isbn }}
                     </div>
                     
-                    <div class="rating-stars">
-                        おすすめ度: {{ str_repeat('★', $r->recommended_level) }}{{ str_repeat('☆', 5 - $r->recommended_level) }}
-                        <span style="font-size: 14px; color: #555;">({{ $r->recommended_level }}/5)</span>
-                    </div>
+                    <p style="margin-top: 15px;"><span class="label-text">タイトル:</span> <strong style="font-size: 1.1em;">{{ $r->title }}</strong></p>
+
+                    <p style="margin-top: 5px;"><span class="label-text">おすすめ度:</span> 
+                        <span style="color: #ffcc00; font-size: 20px; letter-spacing: 2px;">
+                            {{ str_repeat('★', $r->recommended_level) }}{{ str_repeat('☆', 5 - $r->recommended_level) }}
+                        </span>
+                        <span style="font-size: 14px; color: #555; margin-left: 5px;">({{ $r->recommended_level }}/5)</span>
+                    </p>
                     
                     <div class="comment-box">
                         {!! nl2br(e($r->comment)) !!}
                     </div>
                     
-                    <a href="{{ route('books.show', ['isbn' => $r->isbn]) }}" class="btn-detail">この書籍の詳細掲示板を見る</a>
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eee; padding-top: 15px; margin-top: 10px;">
+                        <span>
+                            <span class="label-text">投稿日:</span> 
+                            <strong>{{ $r->updated_at ? $r->updated_at->format('Y/m/d H:i') . ' 編集' : ($r->created_at ? $r->created_at->format('Y/m/d H:i') . ' 投稿' : '未設定') }}</strong>
+                        </span>
+                        <a href="{{ route('books.show', ['isbn' => $r->isbn]) }}" class="btn-detail">この書籍の詳細掲示板を見る</a>
+                    </div>
                 </div>
             @endforeach
         @else
