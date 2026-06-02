@@ -14,4 +14,10 @@ class Book extends Model
 
     // もし主キーが自動インクリメント（連番）の数字ではない場合は以下も必要
     public $incrementing = false; 
+
+    const ISBN_LENGTH = 13;
+    const MAX_BOOK_NAME = 128;
+    const MAX_AUTHOR_NAME = 128;
+    const MAX_COVER_IMAGE = 256;
+    const MAX_PUBLISHER = 128;
 }

@@ -7,24 +7,8 @@
             <form action="{{ route('create.submit') }}" method="post">
                 @csrf
                 <div class="form-group">
-                    <label>書籍名</label>
-                    <input
-                        type="text"
-                        name="title"
-                        value="{{ old('title') }}"
-                        placeholder="書籍名を入力">
-
-                    @error('title')
-                    <div class="error">
-                        {{ $message }}
-                    </div>
-                    @enderror
-
-                </div>
-
-                <div class="form-group">
                     <label>ISBN</label>
-                    <input type="number" name="isbn" value="{{old('isbn')}}" required>
+                    <input type="text" name="isbn" value="{{old('isbn')}}" required>
 
                     @error('isbn')
                     <div class="error">

@@ -30,7 +30,15 @@ class BooksController extends Controller
     public function store(Request $req){
         
         $book = new Book();
-        $isbn =$req->isbn;
+        
+        // 入力されたISBNを数字のみにクレンジング
+        $isbn = $this->formatIsbn($req->isbn);
+
+        // もしクレンジング結果が空、または正しい桁数（10桁か13桁）でない場合の簡易チェック
+        // ※必要に応じてバリデーションを別途追加してください
+        if (empty($isbn)) {
+            return redirect()->route('books.create')->withErrors(['isbn' => '有効なISBN番号を入力してください。']);
+        }
 
         // もしすでに登録されている場合フォームへ戻す
         $exists = Book::where('isbn', $isbn)->exists();
@@ -116,9 +124,28 @@ class BooksController extends Controller
         }
         
         $book->isbn = (int)$summary['isbn'];
-        $book->book_name = $summary['title'] ?? 'タイトル不明';
-        $book->author_name = $summary['author'] ?? '著者不明';
-        $book->cover_image = $summary['cover'] ;
+        
+        // タイトル
+        $book->book_name = mb_substr(
+            $summary['title'] ?? 'タイトル不明', 
+            0, 
+            Book::MAX_BOOK_NAME, 
+            'UTF-8'
+        );
+
+        $book->author_name = isset($summary['author']) 
+            ? mb_substr($summary['author'], 0, Book::MAX_AUTHOR_NAME, 'UTF-8') 
+            : null;
+
+        $book->publisher = isset($summary['publisher']) 
+            ? mb_substr($summary['publisher'], 0, Book::MAX_PUBLISHER, 'UTF-8') 
+            : null;
+
+        $book->cover_image = isset($summary['cover']) 
+            ? mb_substr($summary['cover'], 0, Book::MAX_COVER_IMAGE, 'UTF-8') 
+            : null;
+
+        $book->publish_date = $summary['pubdate'] ?? null;
 
         // booksテーブルにデータを保存するメソッドの実行
         $book->save();
@@ -150,5 +177,23 @@ class BooksController extends Controller
         return view('Books.show',$data);
     }
 
+    /**
+     * ISBNの入力値を半角数字のみにフォーマットする
+     * * @param string|null $isbn
+     * @return string
+     */
+    private function formatIsbn(?string $isbn): string
+    {
+        if (is_null($isbn)) {
+            return '';
+        }
 
+        // 1. 全角数字を半角数字に変換（「１２３」→「123」）
+        $converted = mb_convert_kana($isbn, 'n', 'UTF-8');
+
+        // 2. 数字以外の文字（ハイフン、スペースなど）をすべて除去
+        $cleaned = preg_replace('/[^0-9]/', '', $converted);
+
+        return $cleaned;
+    }
 }

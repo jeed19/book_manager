@@ -23,5 +23,14 @@
         <p style="margin: 0 0 5px 0; color: #666; font-size: 0.9rem;">
             <strong>著者:</strong> {{ $author }}
         </p>
+        <p style="margin: 0 0 5px 0; color: #666; font-size: 0.9rem;">
+            <strong>発売:</strong> 
+        </p>
+        <p style="margin: 0 0 5px 0; color: #666; font-size: 0.9rem;">
+            <strong>出版社:</strong> 
+        </p>
+        <p style="margin: 0 0 5px 0; color: #666; font-size: 0.9rem;">
+            <strong>ISBN:</strong> {{ $isbn }}
+        </p>
     </div>
 </div>

@@ -19,6 +19,8 @@ class BooksSeeder extends Seeder
             'isbn' => 9784297152437,
             'book_name' => 'かやのき先生のITパスポート教室〈令和08年〉',
             'author_name' => '栢木 厚',
+            'publisher' => null,
+            'publish_date' => null,
             'created_at' => null,
             'updated_at' => null
         ]);
