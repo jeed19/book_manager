@@ -123,6 +123,8 @@ class BooksController extends Controller
             }
         }
         
+        // DBの各項目へデータを入れる
+        
         $book->isbn = (int)$summary['isbn'];
         
         // タイトル
@@ -145,7 +147,12 @@ class BooksController extends Controller
             ? mb_substr($summary['cover'], 0, Book::MAX_COVER_IMAGE, 'UTF-8') 
             : null;
 
-        $book->publish_date = $summary['pubdate'] ?? null;
+        // 三項演算子などで、空文字「''」や未定義の場合に確実に null になるようにする
+        $pubdate = !empty($summary['pubdate']) ? $summary['pubdate'] : null;
+
+        // (int) でキャストして保存する（null の場合は null のまま）
+        $book->publish_date = is_null($pubdate) ? null : (int)$pubdate;
+
 
         // booksテーブルにデータを保存するメソッドの実行
         $book->save();
