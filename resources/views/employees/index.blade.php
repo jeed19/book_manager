@@ -1,11 +1,6 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>社員管理（社員一覧・ロック解除）</title>
-</head>
-<body>
+@extends('layouts.base')
+@section('main')
+@section('title', '社員一覧')
     <h1>社員管理システム（社員一覧）</h1>
 
     @if (session('status'))
@@ -21,8 +16,6 @@
             @endforeach
         </ul>
     @endif
-
-    <h3>社員・アカウントステータス一覧</h3>
 
     @if($employees->isEmpty())
         <p>社員データが登録されていません。</p>
@@ -58,7 +51,7 @@
                         </td>
                         <td>
                             @if($emp->locked_at)
-                                <form action="/Employees/unlock" method="post" style="margin: 0;">
+                                <form action="/employees/unlock" method="post" style="margin: 0;">
                                     @csrf
                                     <input type="hidden" name="employee_id" value="{{ $emp->employee_id }}">
                                     <input type="submit" value="ロック解除" onclick="return confirm('この社員（ID: {{ $emp->employee_id }}）のロックを解除しますか？');">
@@ -77,5 +70,4 @@
         <a href="{{ route('books.index') }}">書籍一覧画面へ戻る</a>
     </p>
     </form>
-</body>
-</html>
+@endsection

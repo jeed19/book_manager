@@ -1,5 +1,6 @@
 @extends('layouts.base')
 @section('main')
+@section('title', '書籍登録')
 
     <main>
         <div class="form-container">

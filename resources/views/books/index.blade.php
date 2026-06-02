@@ -31,7 +31,7 @@
                 <div class="image-container">
                     @if($record->cover_image)
                         {{-- 参考コードに合わせ、 asset('storage/') が不要なケース（直接パスが入っている場合）は調整してください --}}
-                        <img src="{{ $record->cover_image }}" alt="{{ $record->book_name }}" alt="表紙" class="book-image">
+                        <img src="{{ $record->cover_image }}" alt="{{ $record->book_name }}" class="book-image">
                     @else
                         <div class="no-image">NO IMAGE</div>
                     @endif

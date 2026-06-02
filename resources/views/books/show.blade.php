@@ -18,12 +18,14 @@
                         isbn="{{$record->isbn}}" 
             />
 
+            @if(session('session_data')['can_register_book'])
             <form action="{{ route('delete.submit') }}" method="POST" onsubmit="return confirm('本当にこの書籍を削除しますか？');">
                 <input type="hidden" name="isbn" value="{{$record->isbn}}">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="btn-delete">書籍削除</button>
             </form>
+            @endif
         <div style="border-top: 2px dashed #ccc; padding-top: 20px;">
                 <h4>あなたの評価とコメント</h4>
                 <form action="{{ route('reviews.store', ['isbn' => $record->isbn]) }}" method="POST" id="comment-form">
