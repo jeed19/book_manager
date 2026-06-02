@@ -22,36 +22,42 @@ class DepartmentSeeder extends Seeder
                 'department_name' => '営業部',
                 'can_unlock' => false,        // ロック解除不可
                 'can_register_book' => false, // 書籍登録不可
+                'can_delete_review' => false // レビュー削除不可
             ],
             [
                 'department_id' => '200',
                 'department_name' => '経理部',
                 'can_unlock' => false,        // ロック解除不可
                 'can_register_book' => true,  // 書籍登録可
+                'can_delete_review' => false // レビュー削除不可
             ],
             [
                 'department_id' => '300',
                 'department_name' => '人事部',
                 'can_unlock' => false,        // ロック解除不可
                 'can_register_book' => false,  // 書籍登録不可
+                'can_delete_review' => false // レビュー削除不可
             ],
             [
                 'department_id' => '500',
                 'department_name' => '開発部',
                 'can_unlock' => false,        // ロック解除不可
                 'can_register_book' => false,  // 書籍登録不可
+                'can_delete_review' => false // レビュー削除不可
             ],
             [
                 'department_id' => '800',
                 'department_name' => '情報システム部',
                 'can_unlock' => true,         // ロック解除可
                 'can_register_book' => false,  // 書籍登録不可
+                'can_delete_review' => true // レビュー削除可
             ],
             [
                 'department_id' => '900',
                 'department_name' => '総務部',
                 'can_unlock' => true,         // ロック解除可
                 'can_register_book' => false, // 書籍登録不可
+                'can_delete_review' => true // レビュー削除可
             ],
         ];
 
