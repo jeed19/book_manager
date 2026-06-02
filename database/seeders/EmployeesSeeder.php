@@ -61,7 +61,7 @@ class EmployeesSeeder extends Seeder
             'locked_at' => null
         ]);
         DB::table('employees')->insert([
-            'employee_id' => 7777777,
+            'employee_id' => 77777777,
             'password' => Hash::make('Ict202601'),
             'department_id' => 200,
             'employee_name' => '長門 侑希',
