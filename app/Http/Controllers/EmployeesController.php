@@ -101,6 +101,7 @@ class EmployeesController extends Controller
             'display_name'    => $employee->display_name,
             'can_register_book'    => $department ? $department->can_register_book : false,
             'can_unlock'      => $department ? $department->can_unlock : false,
+            'can_delete_review'      => $department ? $department->can_delete_review : false
         ];
 
         // セッション開始

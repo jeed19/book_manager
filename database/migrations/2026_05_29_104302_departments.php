@@ -20,6 +20,8 @@ return new class extends Migration
             $table->boolean('can_register_book')->default(false);
             // ロック解除権限フラグ（デフォルトは 0:権限なし）
             $table->boolean('can_unlock')->default(false);
+            // レビュー削除権限フラグ（デフォルトは 0:権限なし）
+            $table->boolean('can_delete_review')->default(false);
             
             // ※今回はモデル側で $timestamps = false を指定するため、
             // created_at, updated_at が不要であれば $table->timestamps(); は記述しません
