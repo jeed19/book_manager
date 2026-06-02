@@ -150,8 +150,8 @@
 
                     @php
                         $has_delete_auth = false;
-                        if(isset($session_data['department_name'])) {
-                            $has_delete_auth = \App\Models\Department::where('department_name', $session_data['department_name'])->value('can_delete_review');
+                        if(isset($session_data['department_id'])) {
+                            $has_delete_auth = \App\Models\Department::where('department_id', $session_data['department_id'])->value('can_delete_review');
                         }
                     @endphp
 
