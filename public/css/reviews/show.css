@@ -1,0 +1,82 @@
+
+        /* 画面全体の基本設定 */
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        /* 全体を包んで中央に寄せる箱 */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* 見出しのデザイン */
+        h1, h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 8px;
+            margin-top: 30px;
+        }
+
+        /* 自分のレビュー部分（白背景のカード風） */
+        .my-review-card {
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+        }
+
+        /* 他の人のレビュー部分（左に黄色の線が入ったカード風） */
+        .other-review-card {
+            background: #ffffff;
+            border-left: 5px solid #ffcc00;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* 共通のボタンデザイン */
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s;
+        }
+        .btn-primary { background-color: #3498db; color: white; }
+        .btn-primary:hover { background-color: #2980b9; }
+        
+        .btn-danger { background-color: #e74c3c; color: white; }
+        .btn-danger:hover { background-color: #c0392b; }
+        
+        .btn-secondary { background-color: #95a5a6; color: white; }
+        .btn-secondary:hover { background-color: #7f8c8d; }
+
+        /* 文字の強調とレイアウト */
+        .label-text {
+            font-size: 0.9em;
+            color: #666;
+            margin-right: 10px;
+        }
+        .star-display {
+            color: #ffcc00; 
+            font-size: 20px;
+            letter-spacing: 2px;
+        }
+        .comment-box {
+            background-color: #f9f9f9; 
+            padding: 15px; 
+            border-radius: 4px;
+            margin-top: 5px;
+        }
