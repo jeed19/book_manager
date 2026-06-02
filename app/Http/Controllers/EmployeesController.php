@@ -162,12 +162,17 @@ class EmployeesController extends Controller
         $validator = Validator::make($req->all(), [
             'employee_id' => 'required|exists:employees,employee_id',
             'new_display_name' => 'required|string|max:' . Employee::DISPLAY_NAME_MAX,
-            'current_password' => 'required|string', // ★必須項目にする
+            
+            // 「新しいパスワード」が入力されている場合のみ「現在のパスワード」を必須にする
+            'current_password' => 'nullable|required_with:new_password|string', 
+            
             'new_password' => $this->passwordRules(true), 
         ], [
             'new_display_name.required' => '表示名を入力してください。',
             'new_display_name.max' => '表示名は' . Employee::DISPLAY_NAME_MAX . '文字以内で入力してください。',
-            'current_password.required' => '現在のパスワードを入力してください。',
+            
+            'current_password.required_with' => 'パスワードを変更する場合は、現在のパスワードを入力してください。',
+            
             'new_password.min' => '新しいパスワードは' . Employee::RAW_PASSWORD_MIN . '文字以上で入力してください。',
             'new_password.max' => '新しいパスワードは' . Employee::RAW_PASSWORD_MAX . '文字以内で入力してください。',
             'new_password.confirmed' => '確認用のパスワードと一致しません。',
@@ -179,15 +184,16 @@ class EmployeesController extends Controller
                 $employee = Employee::where('employee_id', $req->employee_id)->first();
                 if (!$employee) return;
 
-                // 【ステップ1】まず「現在のパスワード」がDBのものと一致するかチェック（Fail-Fast）
-                if (!Hash::check($req->current_password, $employee->password)) {
-                    $validator->errors()->add('current_password', '現在のパスワードが違います。');
-                    return; // 一致しない場合はここで終了（新しいパスワードの検証はしない）
-                }
-
-                // 【ステップ2】現在のパスワードが正しいことを確認した上で、新しいパスワードが入力されていたら比較
+                // 新しいパスワードが入力されている場合のみ、パスワードの検証を行う
                 if (!empty($req->new_password)) {
-                    // 入力された新しいパスワードが、現在のパスワード（DBのハッシュ）と同じか
+                    
+                    // 【ステップ1】「現在のパスワード」がDBのものと一致するかチェック（Fail-Fast）
+                    if (!Hash::check($req->current_password, $employee->password)) {
+                        $validator->errors()->add('current_password', '現在のパスワードが違います。');
+                        return; // 一致しない場合はここで終了（新しいパスワードの同一性検証はしない）
+                    }
+
+                    // 【ステップ2】現在のパスワードが正しいことを確認した上で、新しいパスワードとの同一性をチェック
                     if (Hash::check($req->new_password, $employee->password)) {
                         $validator->errors()->add(
                             'new_password',
@@ -206,6 +212,7 @@ class EmployeesController extends Controller
         $employee = Employee::where('employee_id', $req->employee_id)->first();
         $employee->display_name = $req->new_display_name;
 
+        // 新しいパスワードがある場合のみハッシュ化して保存
         if (!empty($req->new_password)) {
             $employee->password = Hash::make($req->new_password);
         }
