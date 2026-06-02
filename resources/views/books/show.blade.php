@@ -66,7 +66,6 @@
                 <h4>他のユーザーの評価・コメント</h4>
 
                 <form action="{{ route('books.show', ['isbn' => $record->isbn]) }}" method="GET" style="margin-bottom: 15px; display: flex; gap: 10px; align-items: center; justify-content: flex-end;">
-                    
                     <span style="font-size: 14px; color: #666;">並び替え:</span>
                     <select name="sort" onchange="this.form.submit()" style="padding: 5px; border-radius: 4px; border: 1px solid #ccc;">
                         <option value="new" {{ request('sort', 'new') == 'new' ? 'selected' : '' }}>新しい順</option>
@@ -81,7 +80,6 @@
                         <option value="5" {{ request('limit') == '5' ? 'selected' : '' }}>5件まで</option>
                         <option value="all" {{ request('limit') == 'all' ? 'selected' : '' }}>すべて</option>
                     </select>
-
                 </form>
 
                 @if(isset($other_reviews) && count($other_reviews) > 0)
@@ -103,8 +101,37 @@
                                 <span><span class="label-text">投稿者:</span> <strong>{{ $other->employee->display_name ?? 'ニックネーム:' . ($other->employee_name ?? '匿名') }}</strong></span>
                                 <span><span class="label-text">投稿日:</span> <strong>{{ $other->updated_at ? $other->updated_at->format('Y/m/d H:i') . ' 編集' : $other->created_at->format('Y/m/d H:i') . ' 投稿' }}</strong></span>
                             </div>
-                        </div>
+
+                            @php
+                                $has_delete_auth = false;
+                                if(isset($session_data['department_name'])) {
+                                    $has_delete_auth = \App\Models\Department::where('department_name', $session_data['department_name'])->value('can_delete_review');
+                                }
+                            @endphp
+
+                            @if($has_delete_auth)
+                                <div style="display: flex; gap: 10px; align-items: center; justify-content: flex-end; margin-top: 15px; padding-top: 10px; border-top: 1px dashed #ccc;">
+                                    <span style="font-size: 12px; color: #e74c3c; font-weight: bold;">※管理者専用:</span>
+                                    
+                                    <a href="{{ route('reviews.edit', ['isbn' => $record->isbn, 'target_employee' => $other->employee_id]) }}" style="background-color: #007bff; color: white; padding: 4px 10px; font-size: 12px; border-radius: 4px; text-decoration: none;">編集</a>
+                                    
+                                    <form action="{{ route('reviews.delete', ['isbn' => $record->isbn, 'target_employee' => $other->employee_id]) }}" method="POST" onsubmit="return confirm('【管理者権限】本当にこのユーザーのレビューを削除しますか？');" style="margin: 0;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" style="background-color: #dc3545; color: white; border: none; padding: 4px 10px; font-size: 12px; border-radius: 4px; cursor: pointer;">削除</button>
+                                    </form>
+                                </div>
+                            @endif
+                            </div>
                     @endforeach
+
+                    @if(method_exists($other_reviews, 'links'))
+                        <div style="margin-top: 20px; display: flex; justify-content: center;">
+                            <style>svg.w-5.h-5 { width: 20px; height: 20px; }</style>
+                            {{ $other_reviews->links() }}
+                        </div>
+                    @endif
+
                 @else
                     <p>まだ他のユーザーのレビューはありません。</p>
                 @endif
@@ -117,6 +144,8 @@
                         全てのレビュー詳細画面へ
                     </a>
                 </div>
+            </section>
+        </div>
             </section>
         </div>
     </main>
