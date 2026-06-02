@@ -148,9 +148,9 @@
                         <span><span class="label-text">投稿日:</span> <strong>{{ $other->created_at ? $other->created_at->format('Y/m/d H:i') : '未設定' }}</strong></span>
                     </div>
 
-                    @if(isset($session_data['department_name']) && $session_data['department_name'] === '経理部')
+                    @if(isset($session_data['can_register_book']) && $session_data['can_register_book'])
                         <div style="display: flex; gap: 10px; align-items: center; justify-content: flex-end; margin-top: 15px; padding-top: 10px; border-top: 1px dashed #ccc;">
-                            <span style="font-size: 12px; color: #e74c3c; font-weight: bold;">※経理部専用管理:</span>
+                            <span style="font-size: 12px; color: #e74c3c; font-weight: bold;">※管理者専用:</span>
                             
                             <a href="{{ route('reviews.edit', ['isbn' => $book->isbn, 'target_employee' => $other->employee_id]) }}" class="btn btn-primary" style="padding: 4px 10px; font-size: 12px;">編集</a>
                             

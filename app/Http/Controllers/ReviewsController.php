@@ -227,6 +227,12 @@ class ReviewsController extends Controller
             return redirect('/');
         }
 
+        $target_employee_id = $session_data['employee_id'];
+
+        if ($req->has('target_employee') && !empty($session_data['can_register_book'])) {
+            $target_employee_id = $req->input('target_employee');
+        }
+
         $review = Review::where('isbn', $isbn)
                         ->where('employee_id', $session_data['employee_id'])
                         ->first();
