@@ -25,9 +25,23 @@
                 <li><a href="/employees/edit">ユーザ表示名・パスワード変更</a></li>
             
                 @if(session('session_data')['can_unlock'])
-                    <li><a href="/employees/index" class="admin-link">【管理者用】アカウントロック解除画面</a></li>
+                    <li><a href="/employees/index" class="admin-link">社員情報管理</a></li>
                 @endif
                 
+                {{-- 【追加】キーワード検索フォーム --}}
+                <div class="search-container" style="margin-bottom: 15px;">
+                    <form action="{{ route('books.index') }}" method="GET">
+                        {{-- 並べ替え状態を引き継ぐためのhidden --}}
+                        <input type="hidden" name="sort_by" value="{{ request('sort_by', 'created_at_desc') }}">
+                        
+                        <input type="text" name="keyword" value="{{ request('keyword') }}" placeholder="書名・著者名・出版社名で検索" style="padding: 5px; width: 250px;">
+                        <button type="submit" style="padding: 5px 10px;">検索</button>
+                        
+                        @if(request('keyword'))
+                            <a href="{{ route('books.index') }}" style="margin-left: 10px; text-decoration: none; color: #666;">クリア</a>
+                        @endif
+                    </form>
+                </div>
                 <li>
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                         @csrf
