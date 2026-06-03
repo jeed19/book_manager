@@ -52,7 +52,7 @@ class EmployeesController extends Controller
                         
                         $validator->errors()->add(
                             'auth_failed', 
-                            "社員IDまたはパスワードが違います"
+                            "このアカウントは連続してログインに失敗したため一時的にロックされています。あと約{$remainingMinutes}分後に再度お試しください。"
                         );
                         return;
                     } else {
