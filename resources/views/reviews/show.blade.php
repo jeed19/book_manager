@@ -150,8 +150,8 @@
 
                     @php
                         $has_delete_auth = false;
-                        if(isset($session_data['department_name'])) {
-                            $has_delete_auth = \App\Models\Department::where('department_name', $session_data['department_name'])->value('can_delete_review');
+                        if(isset($session_data['department_id'])) {
+                            $has_delete_auth = \App\Models\Department::where('department_id', $session_data['department_id'])->value('can_delete_review');
                         }
                     @endphp
 
@@ -159,7 +159,7 @@
                         <div style="display: flex; gap: 10px; align-items: center; justify-content: flex-end; margin-top: 15px; padding-top: 10px; border-top: 1px dashed #ccc;">
                             <span style="font-size: 12px; color: #e74c3c; font-weight: bold;">※管理者専用:</span>
                             
-                            <a href="{{ route('reviews.edit', ['isbn' => $book->isbn, 'target_employee' => $other->employee_id]) }}" class="btn btn-primary" style="padding: 4px 10px; font-size: 12px;">編集</a>
+                            <!-- <a href="{{ route('reviews.edit', ['isbn' => $book->isbn, 'target_employee' => $other->employee_id]) }}" class="btn btn-primary" style="padding: 4px 10px; font-size: 12px;">編集</a> -->
                             
                             <form action="{{ route('reviews.delete', ['isbn' => $book->isbn, 'target_employee' => $other->employee_id]) }}" method="POST" onsubmit="return confirm('【管理者権限】本当にこのユーザーのレビューを削除しますか？');" style="margin: 0;">
                                 @csrf
