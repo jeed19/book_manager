@@ -1,59 +1,38 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 書籍管理システム (Laravel)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+会社所有の書籍について、レビューや評価を共有できる書籍管理アプリケーションです。
+openBD APIおよびGoogle Books APIと連携し、ISBN番号を入力するだけで簡単に書籍情報の自動取得・登録が行えます。
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 💻 主な機能
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 1. 書籍管理（CRUD & 外部API連携）
+* **自動クレンジング機能**: ISBN入力時に全角数字やハイフン（`-`）が含まれていても、自動で半角数字のみに整形して処理します。
+* **外部API連携による自動登録**: openBD API から書名、著者、出版社、発売日、書影を自動取得。データが不足している場合は Google Books API から補完します。
+* **データ保護（安全設計）**: DBの文字数制限によるシステムエラー（500エラー）を防ぐため、一定文字数を超えるテキストは自動的に安全な長さへ切り詰めて保存します。
+* **権限管理（ガード機能）**: 書籍の登録や管理（画面アクセス・POST処理）は、権限を持つ特定の部署（経理部）の社員のみに制限しています。
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 2. 書籍検索・並べ替え
+* **あいまい検索**: 書名（タイトル）や著者名からキーワードによる部分一致検索が可能です。
+* **柔軟なソート**: 登録日の「新しい順」「古い順」での並び替えに対応しています（検索結果を維持したままのソートも可能）。
 
-## Learning Laravel
+### 3. レビュー・評価システム
+* **個人レビュー管理**: 書籍ごとに5段階の星評価（★）とタイトル、コメントを投稿・編集できます。
+* **総合スコアのリアルタイム集計**: 書籍詳細画面にて、その本に対する「総レビュー件数」と「平均評価スコア」をリアルタイム表示します。
+* **他ユーザーレビューの閲覧・ソート**: 他のメンバーが書いたレビューを「新しい順」「古い順」「おすすめ度が高い順/低い順」に並び替えて閲覧できます。
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+### 4. 独自セッションによるログイン・認証機能 ＆ セキュリティガード
+* **部署連動型ログイン**: ログイン時に社員情報だけでなく、紐づく部署情報も含めて一括でカスタムセッション（`session_data`）に保持し、画面ごとの適切な権限チェックを実現しています。
+* **入力クレンジング・文字数制限**: パスワード入力時、データベースの設計やシステムの許容範囲を超える過大な文字数が入力された場合、認証処理の手前で適切にバリデーション（制限）をかけ、不正なリクエストによるシステムエラーを未然に防ぎます。
+* **ログイン失敗時のタイムアウト（連続試行制限）**: 短時間に何度もログインを失敗した場合に、一定時間の操作をロック（タイムアウト）する仕様を導入。悪意のある第三者による総当たり攻撃（ブルートフォース攻撃）からアカウントの安全を守ります。
+* **アカウント探索防止（エラーメッセージの統一）**: ログイン失敗時、「社員番号が登録されていません」や「パスワードが違います」といった原因を特定できるメッセージを避け、「社員番号またはパスワードが正しくありません」という統一メッセージを表示。悪意のある第三者による登録済みユーザー（アカウント）の割り出し・特定を防ぎます。
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## 🛠️ 使用技術
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+* **バックエンド**: PHP 8.2.12 / Laravel 12.6.0
+* **フロントエンド**: Bladeテンプレート / CSS
+* **データベース**: MySQL
+* **外部API**: openBD API / Google Books API
