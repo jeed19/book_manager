@@ -35,15 +35,20 @@ class EmployeesController extends Controller
             $validator->after(function ($validator) use ($req) {
                 $employee = Employee::where('employee_id', $req->employee_id)->first();
 
-                // ★【変更】一時アカウントロック状態の確認
+                // 一時アカウントロック状態の確認
                 if ($employee && $employee->locked_at !== null) {
                     
                     // ロックされた日時から30分経過しているか計算
-                    // (現在時刻が locked_at の30分後よりも前＝まだ30分経っていない)
-                    if (now()->before($employee->locked_at->addMinutes(30))) {
+                    // (現在時刻 < locked_at の30分後 ＝ まだ30分経っていない)
+                    if (now()->lt($employee->locked_at->addMinutes(30))) {
                         
-                        // 残り時間を計算してメッセージに出すと親切です
-                        $remainingMinutes = now()->diffInMinutes($employee->locked_at->addMinutes(30)) + 1;
+                        // ★修正：残り分数を計算し、小数が出ないよう確実に切り上げて整数にする
+                        $remainingMinutes = (int) ceil(now()->diffInMinutes($employee->locked_at->addMinutes(5)));
+                        
+                        // 万が一計算のタイミングで0分になってしまった場合は最低「1分」と表示するガード
+                        if ($remainingMinutes < 1) {
+                            $remainingMinutes = 1;
+                        }
                         
                         $validator->errors()->add(
                             'auth_failed', 
@@ -51,7 +56,7 @@ class EmployeesController extends Controller
                         );
                         return;
                     } else {
-                        // ★30分以上経過していれば、自動解除とみなしてロック日時とカウンターをリセット
+                        // 30分以上経過していれば、自動解除とみなしてロック日時とカウンターをリセット
                         $employee->locked_at = null;
                         $employee->login_failure_count = 0;
                         $employee->save();
