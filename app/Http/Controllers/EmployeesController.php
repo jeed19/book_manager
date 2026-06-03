@@ -40,7 +40,7 @@ class EmployeesController extends Controller
                     
                     // ロックされた日時から30分経過しているか計算
                     // (現在時刻 < locked_at の30分後 ＝ まだ30分経っていない)
-                    if (now()->lt($employee->locked_at->addMinutes(30))) {
+                    if (now()->lt($employee->locked_at->addMinutes(5))) {
                         
                         // ★修正：残り分数を計算し、小数が出ないよう確実に切り上げて整数にする
                         $remainingMinutes = (int) ceil(now()->diffInMinutes($employee->locked_at->addMinutes(5)));
@@ -52,7 +52,7 @@ class EmployeesController extends Controller
                         
                         $validator->errors()->add(
                             'auth_failed', 
-                            "このアカウントは連続してログインに失敗したため一時的にロックされています。あと約{$remainingMinutes}分後に再度お試しください。"
+                            "社員IDまたはパスワードが違います"
                         );
                         return;
                     } else {

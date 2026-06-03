@@ -104,14 +104,26 @@ class ReviewsController extends Controller
 
         $other_reviews->appends($req->all());
 
+        // --- 【今回追加する集計処理】 ---
+        // レビュー件数を取得
+        $review_count = Review::where('isbn', $isbn)->count();
+
+        // 平均評価を取得（四捨五入して小数点第1位まで丸める。レビューがない場合は 0.0）
+        $review_avg = Review::where('isbn', $isbn)->avg('recommended_level');
+        $review_avg = $review_avg ? round($review_avg, 1) : 0.0;
+        // ---------------------------------
+
         $data = [
             'session_data' => $session_data,
             'reviews' => $review,
             'record' => $book,
             'other_reviews' => $other_reviews,
+            // ビューへ追加した変数を渡す
+            'review_count' => $review_count,
+            'review_avg' => $review_avg,
         ];
 
-        return view('books.show',$data);
+        return view('books.show', $data);
     }
 
         public function showReviewsDetail(Request $req, $isbn)
@@ -255,8 +267,8 @@ class ReviewsController extends Controller
         $target_employee_id = $session_data['employee_id'];
 
         $can_delete_review = false;
-        if (isset($session_data['department_name'])) {
-            $can_delete_review = \App\Models\Department::where('department_name', $session_data['department_name'])->value('can_delete_review');
+        if (isset($session_data['department_id'])) {
+            $can_delete_review = \App\Models\Department::where('department_id', $session_data['department_id'])->value('can_delete_review');
         }
 
         if ($req->has('target_employee') && $can_delete_review) {
