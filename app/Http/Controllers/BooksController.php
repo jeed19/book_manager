@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Client\ConnectionException;
 use App\Models\Book;
 use App\Models\Employee;
+use App\Models\Department;
 use App\Models\Review;
 
 
@@ -15,22 +16,32 @@ class BooksController extends Controller
 {
     public function index(Request $req){
         
-        // 1. クエリビルダの初期化（シンプルに全件取得の準備）
+        // 1. クエリビルダの初期化
         $query = Book::query();
 
-        // 2. リクエストから並べ替え条件を取得（デフォルトは新着順：created_at_desc）
+        // 2. あいまい検索処理の追加
+        // キーワードが入力されている場合のみ実行
+        if ($req->filled('keyword')) {
+            $keyword = $req->input('keyword');
+            
+            $query->where(function($q) use ($keyword) {
+                $q->where('book_name', 'like', "%{$keyword}%")
+                  ->orWhere('author_name', 'like', "%{$keyword}%")
+                  ->orWhere('publisher', 'like', "%{$keyword}%");
+            });
+        }
+
+        // 3. リクエストから並べ替え条件を取得（デフォルトは新着順）
         $sortBy = $req->input('sort_by', 'created_at_desc');
 
-        // 3. 条件分岐による並べ替えの制御
+        // 条件分岐による並べ替えの制御
         switch ($sortBy) {
             case 'created_at_asc':
-                // 登録日の古い順
                 $query->orderBy('created_at', 'asc');
                 break;
 
             case 'created_at_desc':
             default:
-                // 登録日の新しい順（新着順）
                 $query->orderBy('created_at', 'desc');
                 break;
         }
@@ -45,10 +56,46 @@ class BooksController extends Controller
     }
 
     public function create(Request $req){
+        // 1. セッションチェック
+        $session_data = $req->session()->get('session_data');
+        if (!$session_data) {
+            return redirect('/');
+        }
+
+        // 2. 書籍登録権限（can_register_book と仮定）のチェック
+        $can_register_book = false;
+        if (isset($session_data['department_name'])) {
+            // 部署テーブルから、現在のユーザーの部署が登録権限を持っているか確認
+            // ※ カラム名は実際のDB（例: can_register_book）に合わせて調整してください
+            $can_register_book = Department::where('department_id', $session_data['department_id'])
+                                           ->value('can_register_book');
+        }
+
+        // 権限がない場合は、書籍一覧へ戻してエラーメッセージを表示
+        if (!$can_register_book) {
+            return redirect()->route('books.index')->withErrors(['error' => '書籍登録の権限がありません。']);
+        }
+
         return view('Books.create');
     }
 
     public function store(Request $req){
+        // 1. セッションチェック
+        $session_data = $req->session()->get('session_data');
+        if (!$session_data) {
+            return redirect('/');
+        }
+
+        // 2. 直接POST要請が来た場合のための防御（二重ガード）
+        $can_register_book = false;
+        if (isset($session_data['department_id'])) {
+            $can_register_book = Department::where('department_id', $session_data['department_id'])
+                                           ->value('can_register_book');
+        }
+
+        if (!$can_register_book) {
+            return redirect()->route('books.index')->withErrors(['error' => '書籍登録の権限がありません。']);
+        }
         
         $book = new Book();
         
@@ -177,14 +224,23 @@ class BooksController extends Controller
 
         // booksテーブルにデータを保存するメソッドの実行
         $book->save();
+        // 【追加】新しく登録した本のISBNを使って、レビュー数と平均評価を都度計算する
+        // (登録直後なので通常は0件・0.0になりますが、エラーを防ぐために必須です)
+        $review_count = Review::where('isbn', $isbn)->count();
+        $review_avg = Review::where('isbn', $isbn)->avg('recommended_level');
+        $review_avg = $review_avg ? round($review_avg, 1) : 0.0;
+
         // 登録したデータを照会画面に渡し、表示する
         $data =[
-            'session_data' => $req->session()->get('session_data',0),
-            'record' =>  $book,
-            'reviews' => Review::where('isbn', $isbn)->first()
+            'session_data' => $req->session()->get('session_data', 0),
+            'record'       => $book,
+            'reviews'      => Review::where('isbn', $isbn)->first(),
+            // 【重要】ここに2つの変数を追加してビューに渡す
+            'review_count' => $review_count,
+            'review_avg'   => $review_avg,
         ];
         
-        return view('Books.show',$data);
+        return view('Books.show', $data);
     }
 
     public function delete(Request $req){ 
@@ -197,12 +253,21 @@ class BooksController extends Controller
 
     public function show(Request $req){
         $isbn = $req->isbn;
+
+        // 【ここにも追加しておくと安全です】
+        $review_count = Review::where('isbn', $isbn)->count();
+        $review_avg = Review::where('isbn', $isbn)->avg('recommended_level');
+        $review_avg = $review_avg ? round($review_avg, 1) : 0.0;
+
         $data =[
-            'session_data' => $req->session()->get('session_data',0),
-            'record' =>  Book::where('isbn', $isbn)->first(),
-            'reviews' => Review::where('isbn', $isbn)->first()
+            'session_data' => $req->session()->get('session_data', 0),
+            'record'       => Book::where('isbn', $isbn)->first(),
+            'reviews'      => Review::where('isbn', $isbn)->first(),
+            // 変数を追加
+            'review_count' => $review_count,
+            'review_avg'   => $review_avg,
         ];
-        return view('Books.show',$data);
+        return view('Books.show', $data);
     }
 
     /**

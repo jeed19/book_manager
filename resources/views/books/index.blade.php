@@ -22,8 +22,13 @@
         </form>
     </div>
 
+    {{-- 【追加】検索結果の件数表示など --}}
+    @if(request('keyword'))
+        <p class="search-result-text">「{{ request('keyword') }}」の検索結果: {{ $records->count() }} 件</p>
+    @endif
+
     <div class="book-grid">
-        @foreach($records as $record)
+        @forelse($records as $record)
         <div class="book-card">
             
             {{-- 1. 画像とタイトルを GET メソッドの正しいルートでリンク化 --}}
@@ -43,14 +48,19 @@
             <div class="book-author">{{ $record->author_name }}</div>
 
             {{-- 2. 詳細ボタンも同じく 正しいルートのリンク（aタグ）に変更 --}}
-            <div class="detail-action">
+            <!-- <div class="detail-action">
                 <a href="{{ route('books.show', ['isbn' => $record->isbn]) }}" class="btn-show-link">
                     <button type="button" class="btn-show">詳細</button>
                 </a>
-            </div>
+            </div> -->
 
         </div>
-        @endforeach
+        @empty
+            {{-- 【追加】検索結果が0件だった場合の表示 --}}
+            <div style="grid-column: 1 / -1; text-align: center; padding: 50px; color: #666;">
+                該当する書籍が見つかりませんでした。
+            </div>
+        @endforelse
     </div>
 
 @endsection
