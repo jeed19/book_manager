@@ -63,7 +63,22 @@
 
         <div class="right-side">
             <section class="right-bottom" style="height: 100%;">
-                <h4>他のユーザーの評価・コメント</h4>
+                
+                {{-- 【修正】タイトル横に全体の集計結果を表示 --}}
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 15px;">
+                    <h4 style="margin: 0;">他のユーザーの評価・コメント</h4>
+                    
+                    {{-- 総合スコアの表示 --}}
+                    <div class="total-rating-box" style="font-size: 14px; background: #f8f9fa; padding: 5px 12px; border-radius: 20px; border: 1px solid #ddd;">
+                        総合評価: 
+                        <strong style="color: #f39c12; font-size: 1.2em;">
+                            ★ {{ number_format($review_avg, 1) }}
+                        </strong> 
+                        <span style="color: #666; margin-left: 5px;">
+                            ({{ $review_count }}件のレビュー)
+                        </span>
+                    </div>
+                </div>
 
                 <form action="{{ route('books.show', ['isbn' => $record->isbn]) }}" method="GET" style="margin-bottom: 15px; display: flex; gap: 10px; align-items: center; justify-content: flex-end;">
                     <span style="font-size: 14px; color: #666;">並び替え:</span>
